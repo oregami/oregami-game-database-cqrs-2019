@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="header :: header" th:with="title='Startseite'"></head>
+<body>
+
+<nav th:replace="navigation :: navigation('index')"></nav>
+
+<div class="ui segment">
+
+    <h2 th:text="#{welcome}"></h2>
+    (login page)
+
+    <div>
+        <span th:text="#{welcomeMessage}"></span><a href="http://forum.oregami.org" target="_blank">forum.oregami.org</a>
+    </div>
+</div>
+
+<div th:replace="footer :: copy"></div>
+
+</body>
+</html>

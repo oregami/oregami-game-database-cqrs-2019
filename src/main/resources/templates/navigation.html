@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+
+
+<nav th:fragment="navigation(activeUrl)" role="navigation" aria-label="navigation" class="navigation">
+
+    <ul class="navigation">
+        <li th:class="${activeUrl}=='index' ? 'active' : ''" id="navHome"><a href="/">Home</a></li>
+
+        <li th:class="${activeUrl}==URL_GAMES ? 'active' : ''"><a th:href="${URL_GAMES}" th:text="#{games}"></a></li>
+        <li th:class="${activeUrl}==URL_GAMINGENVIRONMENTS ? 'active' : ''"><a th:href="${URL_GAMINGENVIRONMENTS}" th:text="#{gamingEnvironments}"></a></li>
+
+    </ul>
+
+    <div class="language">
+        <a th:href="@{${#httpServletRequest.requestURI + '?lang=en'}}" title="en"><i class="gb flag"></i></a>
+        <a th:href="@{${#httpServletRequest.requestURI + '?lang=de'}}" title="de"><i class="de flag"></i></a>
+
+    </div>
+
+    <div class="nav-login">
+
+        <div sec:authorize="isAuthenticated()">
+            <a class="ui green compact button" th:href="@{/logout}">
+                <i class="sign out icon"></i>
+                <span th:text="${userName}"></span>
+            </a>
+        </div>
+
+        <div sec:authorize="isAnonymous()">
+            <a class="mini compact ui green button" th:href="@{/login}">Login</a>
+            <a class="mini compact ui green button" th:href="@{/register}">Register</a>
+        </div>
+
+
+    </div>
+</nav>
+
+
+<body>
+
+
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
+<!--
+@mobileBreakpoint            : 320px;	mobile
+@tabletBreakpoint            : 768px;	tablet
+@computerBreakpoint          : 992px;	computer
+@largeMonitorBreakpoint      : 1400px;	large screen
+@widescreenMonitorBreakpoint : 1900px;	widescreen
+-->
+<head th:fragment="header">
+
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title th:text="${title + '  - Oregami.org'}"></title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!--<link rel="stylesheet" type="text/css" href="/static/semantic/dist/semantic.min.css"/>-->
+    <!--<script src="semantic/dist/semantic.min.js"></script>-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.7/semantic.min.css"/>
+
+
+    <link href="/style.css" rel="stylesheet" media="all"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+
+    
+    <!--<meta property="og:url"               th:content=""/>-->
+    <meta property="og:type" content="article"/>
+    <meta property="og:title" th:content="${title} + ' - Oregami.org'"/>
+    <meta property="og:description" th:content="${description ?: 'Oregami.org'}"/>
+
+
+</head>
+
+<body>
+
+
+</body>
+
+</html>
