@@ -1,7 +1,20 @@
 package org.oregami.gamingEnvironments.adapter;
 
+import org.apache.commons.lang3.builder.RecursiveToStringStyle;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.axonframework.eventsourcing.DomainEventMessage;
+import org.axonframework.eventsourcing.eventstore.DomainEventStream;
+import org.axonframework.eventsourcing.eventstore.EventStore;
+import org.oregami.gamingEnvironments.application.GamingEnvironmentApplicationService;
+import org.oregami.gamingEnvironments.model.GamingEnvironmentRepository;
+import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Created by sebastian on 17.12.16.
@@ -10,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class GamingEnvironmentResource {
 
-    /*
     private GamingEnvironmentApplicationService gamingEnvironmentApplicationService;
 
     private EventStore eventStore;
@@ -32,16 +44,6 @@ public class GamingEnvironmentResource {
         return "gamingEnvironments/created";
     }
 
-    @PostMapping(value = "/{gamingEnvironmentId}/addTitle")
-    public String addTitle(@PathVariable String gamingEnvironmentId
-            , @RequestParam String titleId
-            , Model model) {
-        String newTitleId = UUID.randomUUID().toString();
-        gamingEnvironmentApplicationService.addTitle(newTitleId, gamingEnvironmentId, titleId);
-        model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
-        return "gamingEnvironments/update_done";
-    }
-
     @GetMapping
     public String getAll(Model model) {
         model.addAttribute("list", gamingEnvironmentRepository.findAll());
@@ -50,7 +52,7 @@ public class GamingEnvironmentResource {
 
     @GetMapping(value = "/{gamingEnvironmentId}")
     public String getOne(@PathVariable String gamingEnvironmentId, Model model) {
-        RGamingEnvironment gamingEnvironment = gamingEnvironmentRepository.findOne(gamingEnvironmentId);
+        RGamingEnvironment gamingEnvironment = gamingEnvironmentRepository.findById(gamingEnvironmentId).get();
         model.addAttribute("gamingEnvironment", gamingEnvironment);
         model.addAttribute("events", getEventsForGamingEnvironmentAsStrings(gamingEnvironmentId));
         return "gamingEnvironments/one";
@@ -59,69 +61,6 @@ public class GamingEnvironmentResource {
     @GetMapping(value = "/create")
     public String createGame(Model model) {
         return "gamingEnvironments/create";
-    }
-
-    @GetMapping(value = "/{gamingEnvironmentId}/addTitle")
-    public String addTitleForm(
-            @PathVariable String gamingEnvironmentId,
-            @RequestParam(value = "titleId", defaultValue = "") String titleId,
-            Model model) {
-        model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
-        model.addAttribute("titleId", titleId);
-        return "gamingEnvironments/addTitle";
-    }
-
-
-    @GetMapping(value = "/{gamingEnvironmentId}/editTitleUsage")
-    public String titleUsage(@PathVariable String gamingEnvironmentId, Model model) {
-        RGamingEnvironment gamingEnvironment = gamingEnvironmentRepository.findOne(gamingEnvironmentId);
-        model.addAttribute("gamingEnvironment", gamingEnvironment);
-
-        Region[] possibleRegions = Region.values();
-        model.addAttribute("availableRegions", Arrays.asList(possibleRegions));
-        TitleType[] possibleTitleTypes = TitleType.values();
-        model.addAttribute("availableTitleTypes", Arrays.asList(possibleTitleTypes));
-
-        return "gamingEnvironments/titleUsage/select";
-    }
-
-
-    @PostMapping(value = "/{gamingEnvironmentId}/editTitleUsage/addRegion")
-    public String titleUsageAddRegion(@PathVariable String gamingEnvironmentId,
-                                      @RequestParam(name="titleId") String titleId,
-                                      @RequestParam(name="region") String region,
-                                      @RequestParam(name="titleType") String titleType,
-                                      Model model) {
-
-        String newTitleUsageId = UUID.randomUUID().toString();
-        CompletableFuture<Object> completableFuture = gamingEnvironmentApplicationService.addTitleUsage(newTitleUsageId, gamingEnvironmentId, titleId, Region.valueOf(region), TitleType.valueOf(titleType));
-
-        try {
-            Object result = completableFuture.get();
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-
-        } catch (ExecutionException e) {
-            if (e.getCause() instanceof ValidationException) {
-                model.addAttribute("result", ((ValidationException) e.getCause()).getResult());
-                model.addAttribute("errorRegion", region);
-
-            } else {
-                List<CommonError> errors = new ArrayList<>();
-                errors.add(new CommonError(new CommonErrorContext("general"), e.getMessage()));
-                model.addAttribute("result", new CommonResult<>(errors));
-            }
-        }
-
-
-        RGamingEnvironment gamingEnvironment = gamingEnvironmentRepository.findOne(gamingEnvironmentId);
-        model.addAttribute("gamingEnvironment", gamingEnvironment);
-
-        Region[] possibleRegions = Region.values();
-        model.addAttribute("availableRegions", Arrays.asList(possibleRegions));
-
-        return "gamingEnvironments/titleUsage/select";
     }
 
 
@@ -142,6 +81,5 @@ public class GamingEnvironmentResource {
         }
         return result;
     }
-    */
 
 }

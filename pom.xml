@@ -96,8 +96,8 @@
 
         <dependency>
             <groupId>org.axonframework</groupId>
-            <artifactId>axon-core</artifactId>
-            <version>${axon.version}</version>
+            <artifactId>axon-spring-boot-starter</artifactId>
+            <version>3.4</version>
         </dependency>
 
         <dependency>

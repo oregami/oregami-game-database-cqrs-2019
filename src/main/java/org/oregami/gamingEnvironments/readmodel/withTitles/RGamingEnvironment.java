@@ -21,11 +21,6 @@ public class RGamingEnvironment extends BaseEntityUUID {
     @Column
     String workingTitle;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch= FetchType.EAGER)
-    @JoinColumn
-    @OrderBy(value = "id")
-    Set<RTitle> gametitles = new TreeSet<>(new OrderComparator());
-
     @Column
     private LocalDateTime changeTime;
 
@@ -38,11 +33,4 @@ public class RGamingEnvironment extends BaseEntityUUID {
         this.changeTime = changeTime;
     }
 
-    public void addTitle(RTitle t) {
-        gametitles.add(t);
-    }
-
-    public Set<RTitle> getGametitles() {
-        return gametitles;
-    }
 }

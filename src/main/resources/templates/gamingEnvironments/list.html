@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="header :: header" th:with="title='Gaming Environments- List'"></head>
+
+<body>
+
+<nav th:replace="navigation :: navigation(URL_GAMINGENVIRONMENTS)"></nav>
+
+<div class="ui segment">
+
+    <div th:each="gamingEnvironment : ${list}">
+
+            <h2 class="ui top attached header">
+                <a th:href="${'/gamingEnvironments/' + gamingEnvironment.id}">
+                    <span th:text="${gamingEnvironment.workingTitle}"/><i class="angle double right icon"></i>
+                </a>
+            </h2>
+
+    </div>
+
+    <div class="ui grey inverted top attached header" th:text="#{common.actions}"/>
+    <div class="ui attached segment">
+        <a href="/gamingEnvironments/create">
+            <button class="ui primary basic button" th:text="#{gamingEnvironment.createNewGamingEnvironment}"></button>
+        </a>
+    </div>
+</div>
+
+
+<div th:replace="footer :: copy"></div>
+
+</body>
+</html>

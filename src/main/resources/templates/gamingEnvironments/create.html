@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+
+<head th:include="header :: header" th:with="title='GamingEnvironment - create'"></head>
+
+
+<body>
+
+<nav th:replace="navigation :: navigation(URL_GAMINGENVIRONMENTS)"></nav>
+
+<div th:replace="loginfirst :: copy"></div>
+
+<div class="ui segment" sec:authorize="isAuthenticated()">
+
+    <form class="ui form" method="POST" th:attr="action=@{/gamingEnvironments/create/}">
+        <h2 class="ui dividing header">Create new GamingEnvironment</h2>
+
+        <div class="inline field">
+            <label>Working title:</label>
+            <input type="text" name="workingTitle"/>
+        </div>
+
+        <button class="ui button" type="submit">create gaming environment</button>
+    </form>
+
+</div>
+
+<div th:replace="footer :: copy"></div>
+
+
+</body>
+</html>

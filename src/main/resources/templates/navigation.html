@@ -11,7 +11,10 @@
     <ul class="navigation">
         <li th:class="${activeUrl}=='index' ? 'active' : ''" id="navHome"><a href="/">Home</a></li>
 
+        <!--
         <li th:class="${activeUrl}==URL_GAMES ? 'active' : ''"><a th:href="${URL_GAMES}" th:text="#{games}"></a></li>
+        -->
+
         <li th:class="${activeUrl}==URL_GAMINGENVIRONMENTS ? 'active' : ''"><a th:href="${URL_GAMINGENVIRONMENTS}" th:text="#{gamingEnvironments}"></a></li>
 
     </ul>

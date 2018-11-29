@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="header :: header" th:with="title='Gaming Environment - One'"></head>
+
+<body>
+
+<nav th:replace="navigation :: navigation(URL_GAMINGENVIRONMENTS)"></nav>
+
+<div class="ui segment">
+
+    <h2 class="ui top attached header" th:text="${gamingEnvironment.workingTitle}"/>
+    <h4 class="ui attached header" th:text="#{gamingEnvironment.basicdata}"></h4>
+    <div class="ui attached segment">
+        <div><label>workingTitle:</label> <span th:text="${gamingEnvironment.workingTitle}"/></div>
+        <div><label>changeTime</label> <span th:text="${gamingEnvironment.changeTime}"/></div>
+    </div>
+
+    <div class="ui grey inverted top attached header" th:text="#{common.actions}"/>
+    <div class="ui attached segment">
+
+    </div>
+
+</div>
+
+
+<div class="ui segment">
+    <div class="ui grey inverted top attached header" th:text="#{common.events}"/>
+    <div th:each="event : ${events}" class="ui attached segment">
+        <span th:text="${event.toString()}"/>
+    </div>
+</div>
+
+
+
+<div th:replace="footer :: copy"></div>
+
+</body>
+</html>

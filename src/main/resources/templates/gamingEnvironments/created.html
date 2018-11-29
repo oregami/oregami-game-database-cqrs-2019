@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="header :: header" th:with="title=''"></head>
+
+<body>
+
+<nav th:replace="navigation :: navigation(URL_GAMINGENVIRONMENTS)"></nav>
+
+<div class="ui segment">
+
+        <a th:href="@{/gamingEnvironments/} + ${gamingEnvironmentId}">view created gaming environment</a>
+</div>
+
+
+</body>
+</html>

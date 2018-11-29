@@ -1,0 +1,6 @@
+
+
+Keycloak-Docker:
+docker run --name keycloak -d -p 8081:8080 -e PROXY_ADDRESS_FORWARDING=true -e KEYCLOAK_HTTP_PORT=8081 jboss/keycloak:4.6.0.Final
+docker exec -it keycloak /opt/jboss/keycloak/bin/add-user-keycloak.sh -u admin
+docker restart keycloak
