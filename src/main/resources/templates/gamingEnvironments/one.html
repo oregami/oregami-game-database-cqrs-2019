@@ -15,12 +15,15 @@
     <h4 class="ui attached header" th:text="#{gamingEnvironment.basicdata}"></h4>
     <div class="ui attached segment">
         <div><label>workingTitle:</label> <span th:text="${gamingEnvironment.workingTitle}"/></div>
+        <div><label>yearOfFirstRelease:</label><span th:text="${gamingEnvironment.yearOfFirstRelease}"/></div>
         <div><label>changeTime</label> <span th:text="${gamingEnvironment.changeTime}"/></div>
     </div>
 
     <div class="ui grey inverted top attached header" th:text="#{common.actions}"/>
     <div class="ui attached segment">
-
+        <a th:if="${gamingEnvironment.yearOfFirstRelease == null}" th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/addYearOfFirstRelease'}">
+            <button class="ui primary basic button" th:text="#{gamingEnvironment.addYearOfFirstRelease}"/>
+        </a>
     </div>
 
 </div>

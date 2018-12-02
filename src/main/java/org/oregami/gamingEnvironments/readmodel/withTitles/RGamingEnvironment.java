@@ -7,6 +7,7 @@ import org.springframework.core.OrderComparator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -22,6 +23,10 @@ public class RGamingEnvironment extends BaseEntityUUID {
     String workingTitle;
 
     @Column
+    private Year yearOfFirstRelease;
+
+
+    @Column
     private LocalDateTime changeTime;
 
     public RGamingEnvironment(String id, String workingTitle) {
@@ -33,4 +38,15 @@ public class RGamingEnvironment extends BaseEntityUUID {
         this.changeTime = changeTime;
     }
 
+    public LocalDateTime getChangeTime() {
+        return changeTime;
+    }
+
+    public void setYearOfFirstRelease(Year yearOfFirstRelease) {
+        this.yearOfFirstRelease = yearOfFirstRelease;
+    }
+
+    public Year getYearOfFirstRelease() {
+        return yearOfFirstRelease;
+    }
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+
+<head th:include="header :: header" th:with="title='Add first release year'"></head>
+
+
+<body>
+
+<nav th:replace="navigation :: navigation(URL_GAMINGENVIRONMENTS)"></nav>
+
+
+<div th:replace="loginfirst :: copy"></div>
+
+<div class="ui segment" sec:authorize="isAuthenticated()">
+
+    <div>
+        <form class="ui form" method="POST" th:attr="action=${'/gamingEnvironments/' + gamingEnvironmentId + '/addYearOfFirstRelease'}">
+            <div class="inline field">
+                <label>First release year:</label>
+                <input name="yearOfFirstRelease" type="text"/>
+            </div>
+            <button class="ui button" type="submit">save</button>
+            <input type="hidden" name="backUrl" th:value="${'/gamingEnvironments/' + gamingEnvironmentId}"/>
+        </form>
+    </div>
+
+
+
+</div>
+
+<div th:replace="footer :: copy"></div>
+
+
+</body>
+</html>

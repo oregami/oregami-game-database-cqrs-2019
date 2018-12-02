@@ -8,8 +8,12 @@ import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.commandhandling.model.AggregateRoot;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.oregami.gamingEnvironments.command.AddYearOfFirstReleaseCommand;
 import org.oregami.gamingEnvironments.command.CreateGamingEnvironmentCommand;
+import org.oregami.gamingEnvironments.event.YearOfFirstReleaseAddedEvent;
 import org.oregami.gamingEnvironments.event.GamingEnvironmentCreatedEvent;
+
+import java.time.Year;
 
 /**
  * Created by sebastian on 03.11.16.
@@ -25,6 +29,9 @@ public class GamingEnvironment {
 
     String workingTitle;
 
+    Year yearOfFirstRelease;
+
+
 
     @CommandHandler
     public GamingEnvironment(CreateGamingEnvironmentCommand command) {
@@ -34,6 +41,17 @@ public class GamingEnvironment {
     @EventSourcingHandler
     public void in(GamingEnvironmentCreatedEvent event) {
         this.id = event.getNewId();
+    }
+
+
+    @CommandHandler
+    public void in(AddYearOfFirstReleaseCommand command) {
+        AggregateLifecycle.apply(new YearOfFirstReleaseAddedEvent(command.getId(), command.getYearOfFirstRelease()));
+    }
+
+    @EventSourcingHandler
+    public void in(YearOfFirstReleaseAddedEvent event) {
+        this.yearOfFirstRelease = event.getYearOfFirstRelease();
     }
 
 

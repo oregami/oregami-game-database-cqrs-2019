@@ -2,6 +2,7 @@ package org.oregami.gamingEnvironments.readmodel.withTitles;
 
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
+import org.oregami.gamingEnvironments.event.YearOfFirstReleaseAddedEvent;
 import org.oregami.gamingEnvironments.event.GamingEnvironmentCreatedEvent;
 import org.oregami.gamingEnvironments.model.GamingEnvironmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,14 @@ public class GamingEnvironmentUpdater {
         g.setChangeTime(LocalDateTime.now());
         repository.save(g);
     }
+
+    @EventHandler
+    public void on(YearOfFirstReleaseAddedEvent event) {
+        RGamingEnvironment g = repository.getOne(event.getId());
+        g.setYearOfFirstRelease(event.getYearOfFirstRelease());
+        g.setChangeTime(LocalDateTime.now());
+        repository.save(g);
+    }
+
 
 }

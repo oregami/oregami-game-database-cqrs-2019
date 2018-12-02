@@ -1,10 +1,12 @@
 package org.oregami.gamingEnvironments.application;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.oregami.gamingEnvironments.command.AddYearOfFirstReleaseCommand;
 import org.oregami.gamingEnvironments.command.CreateGamingEnvironmentCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Year;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -24,5 +26,9 @@ public class GamingEnvironmentApplicationService {
         return commandGateway.send(new CreateGamingEnvironmentCommand(newId, workingTitle));
     }
 
+
+    public CompletableFuture<Object> addYearOfFirstRelease(String gamingEnvironmentId, Year yearOfFirstRelease) {
+        return commandGateway.send(new AddYearOfFirstReleaseCommand(gamingEnvironmentId, yearOfFirstRelease));
+    }
 
 }

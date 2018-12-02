@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Year;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -63,6 +64,21 @@ public class GamingEnvironmentResource {
         return "gamingEnvironments/create";
     }
 
+
+    @GetMapping(value = "/{gamingEnvironmentId}/addYearOfFirstRelease")
+    public String addYearOfFirstRelease(@PathVariable String gamingEnvironmentId, Model model) {
+        model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
+        return "gamingEnvironments/addYearOfFirstRelease";
+    }
+
+    @PostMapping(value = "/{gamingEnvironmentId}/addYearOfFirstRelease")
+    public String addYearOfFirstRelease(@PathVariable String gamingEnvironmentId
+            , @RequestParam Year yearOfFirstRelease
+            , Model model) {
+        gamingEnvironmentApplicationService.addYearOfFirstRelease(gamingEnvironmentId, yearOfFirstRelease);
+        model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
+        return "gamingEnvironments/update_done";
+    }
 
     private List<Map<String, Object>> getEventsForGamingEnvironmentAsStrings(String gamingEnvironmentId) {
         List<Map<String, Object>> result = new ArrayList<>();
