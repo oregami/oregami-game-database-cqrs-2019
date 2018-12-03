@@ -80,6 +80,22 @@ public class GamingEnvironmentResource {
         return "gamingEnvironments/update_done";
     }
 
+    @GetMapping(value = "/{gamingEnvironmentId}/changeYearOfFirstRelease")
+    public String changeYearOfFirstRelease(@PathVariable String gamingEnvironmentId, Model model) {
+        model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
+        model.addAttribute("yearOfFirstRelease", gamingEnvironmentRepository.getOne(gamingEnvironmentId).getYearOfFirstRelease());
+        return "gamingEnvironments/changeYearOfFirstRelease";
+    }
+
+    @PostMapping(value = "/{gamingEnvironmentId}/changeYearOfFirstRelease")
+    public String changeYearOfFirstRelease(@PathVariable String gamingEnvironmentId
+            , @RequestParam Year yearOfFirstRelease
+            , Model model) {
+        gamingEnvironmentApplicationService.changeYearOfFirstRelease(gamingEnvironmentId, yearOfFirstRelease);
+        model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
+        return "gamingEnvironments/update_done";
+    }
+
     private List<Map<String, Object>> getEventsForGamingEnvironmentAsStrings(String gamingEnvironmentId) {
         List<Map<String, Object>> result = new ArrayList<>();
         DomainEventStream domainEventStream = eventStore.readEvents(gamingEnvironmentId);

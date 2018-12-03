@@ -24,6 +24,9 @@
         <a th:if="${gamingEnvironment.yearOfFirstRelease == null}" th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/addYearOfFirstRelease'}">
             <button class="ui primary basic button" th:text="#{gamingEnvironment.addYearOfFirstRelease}"/>
         </a>
+        <a th:if="${gamingEnvironment.yearOfFirstRelease != null}" th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/changeYearOfFirstRelease'}">
+            <button class="ui primary basic button" th:text="#{gamingEnvironment.changeYearOfFirstRelease}"/>
+        </a>
     </div>
 
 </div>

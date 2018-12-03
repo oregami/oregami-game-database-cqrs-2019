@@ -5,13 +5,14 @@ import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateLifecycle;
-import org.axonframework.commandhandling.model.AggregateRoot;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.oregami.gamingEnvironments.command.AddYearOfFirstReleaseCommand;
+import org.oregami.gamingEnvironments.command.ChangeYearOfFirstReleaseCommand;
 import org.oregami.gamingEnvironments.command.CreateGamingEnvironmentCommand;
-import org.oregami.gamingEnvironments.event.YearOfFirstReleaseAddedEvent;
 import org.oregami.gamingEnvironments.event.GamingEnvironmentCreatedEvent;
+import org.oregami.gamingEnvironments.event.YearOfFirstReleaseAddedEvent;
+import org.oregami.gamingEnvironments.event.YearOfFirstReleaseChangedEvent;
 
 import java.time.Year;
 
@@ -54,5 +55,15 @@ public class GamingEnvironment {
         this.yearOfFirstRelease = event.getYearOfFirstRelease();
     }
 
+    @CommandHandler
+    public void in(ChangeYearOfFirstReleaseCommand command) {
+        AggregateLifecycle.apply(new YearOfFirstReleaseChangedEvent(command.getId(), command.getYearOfFirstRelease()));
+    }
+
+
+    @EventSourcingHandler
+    public void in(YearOfFirstReleaseChangedEvent event) {
+        this.yearOfFirstRelease = event.getYearOfFirstRelease();
+    }
 
 }
