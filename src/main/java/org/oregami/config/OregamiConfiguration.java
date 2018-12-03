@@ -24,7 +24,7 @@ public class OregamiConfiguration {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(Locale.GERMANY); // Set default Locale as US
+        slr.setDefaultLocale(Locale.US); // Set default Locale as US
         return slr;
     }
 
