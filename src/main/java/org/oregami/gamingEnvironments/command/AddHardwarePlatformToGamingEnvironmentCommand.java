@@ -6,20 +6,20 @@ import org.axonframework.commandhandling.TargetAggregateIdentifier;
 import java.time.Year;
 
 @Data
-public class AddYearOfFirstReleaseCommand {
+public class AddHardwarePlatformToGamingEnvironmentCommand {
 
     @TargetAggregateIdentifier
     private final String gamingEnvironmentId;
 
-    private Year yearOfFirstRelease;
+    private String hardwarePlatformId;
 
-    public AddYearOfFirstReleaseCommand(String gamingEnvironmentId, Year yearOfFirstRelease) {
+    public AddHardwarePlatformToGamingEnvironmentCommand(String gamingEnvironmentId, String hardwarePlatformId) {
         this.gamingEnvironmentId = gamingEnvironmentId;
-        this.yearOfFirstRelease = yearOfFirstRelease;
+        this.hardwarePlatformId = hardwarePlatformId;
     }
 
-    public Year getYearOfFirstRelease() {
-        return yearOfFirstRelease;
+    public String getHardwarePlatformId() {
+        return hardwarePlatformId;
     }
 
     public String getGamingEnvironmentId() {

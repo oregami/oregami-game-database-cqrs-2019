@@ -19,6 +19,15 @@
         <div><label>changeTime</label> <span th:text="${gamingEnvironment.changeTime}"/></div>
     </div>
 
+
+    <h4 class="ui attached header" th:text="#{gamingEnvironment.hardwarePlatforms}" th:if="${gamingEnvironment.hardwarePlatformSet.size()>0}"></h4>
+
+    <div class="ui attached segment" th:if="${gamingEnvironment.hardwarePlatformSet.size()>0}">
+        <div th:each="hardwarePlatform : ${gamingEnvironment.hardwarePlatformSet}">
+            <span th:text="${hardwarePlatform.workingTitle}">hpf</span>
+        </div>
+    </div>
+
     <div class="ui grey inverted top attached header" th:text="#{common.actions}"/>
     <div class="ui attached segment">
         <a th:if="${gamingEnvironment.yearOfFirstRelease == null}" th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/addYearOfFirstRelease'}">
@@ -27,6 +36,10 @@
         <a th:if="${gamingEnvironment.yearOfFirstRelease != null}" th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/changeYearOfFirstRelease'}">
             <button class="ui primary basic button" th:text="#{gamingEnvironment.changeYearOfFirstRelease}"/>
         </a>
+        <a th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/addNewHardwarePlatform'}">
+            <button class="ui primary basic button" th:text="#{gamingEnvironment.addNewHardwarePlatform}"/>
+        </a>
+
     </div>
 
 </div>

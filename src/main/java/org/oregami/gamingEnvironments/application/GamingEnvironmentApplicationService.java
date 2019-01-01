@@ -1,6 +1,7 @@
 package org.oregami.gamingEnvironments.application;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.oregami.gamingEnvironments.command.AddHardwarePlatformToGamingEnvironmentCommand;
 import org.oregami.gamingEnvironments.command.AddYearOfFirstReleaseCommand;
 import org.oregami.gamingEnvironments.command.ChangeYearOfFirstReleaseCommand;
 import org.oregami.gamingEnvironments.command.CreateGamingEnvironmentCommand;
@@ -35,4 +36,11 @@ public class GamingEnvironmentApplicationService {
     public CompletableFuture<Object> changeYearOfFirstRelease(String gamingEnvironmentId, Year yearOfFirstRelease) {
         return commandGateway.send(new ChangeYearOfFirstReleaseCommand(gamingEnvironmentId, yearOfFirstRelease));
     }
+
+
+    public CompletableFuture<Object> addHardwarePlatformToGamingEnvironment(String gamingEnvironmentId, String hardwarePlatformId) {
+        return commandGateway.send(new AddHardwarePlatformToGamingEnvironmentCommand(gamingEnvironmentId, hardwarePlatformId));
+    }
+
+
 }

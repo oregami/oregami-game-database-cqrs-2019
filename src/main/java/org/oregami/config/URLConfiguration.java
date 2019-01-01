@@ -15,6 +15,8 @@ public class URLConfiguration {
 	enum URLS {
 		PUBLICATIONFRANCHISE("/publicationFranchise")
         ,GAMINGENVIRONMENTS("/gamingEnvironments")
+        ,HARDWAREPLATFORMS("/hardwarePlatforms")
+
         ,GAMES("/games")
 		,HOME("/")
         ,TRANSLITERATEDSTRINGS("/transliteratedStrings")

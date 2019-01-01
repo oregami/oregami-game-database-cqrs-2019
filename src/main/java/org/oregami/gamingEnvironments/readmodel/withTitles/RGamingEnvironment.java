@@ -25,9 +25,11 @@ public class RGamingEnvironment extends BaseEntityUUID {
     @Column
     private Year yearOfFirstRelease;
 
-
     @Column
     private LocalDateTime changeTime;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<RHardwarePlatform> hardwarePlatformSet = new TreeSet<>();
 
     public RGamingEnvironment(String id, String workingTitle) {
         super(id);
@@ -48,5 +50,17 @@ public class RGamingEnvironment extends BaseEntityUUID {
 
     public Year getYearOfFirstRelease() {
         return yearOfFirstRelease;
+    }
+
+    public String getWorkingTitle() {
+        return workingTitle;
+    }
+
+    public Set<RHardwarePlatform> getHardwarePlatformSet() {
+        return hardwarePlatformSet;
+    }
+
+    public void setHardwarePlatformSet(Set<RHardwarePlatform> hardwarePlatformSet) {
+        this.hardwarePlatformSet = hardwarePlatformSet;
     }
 }

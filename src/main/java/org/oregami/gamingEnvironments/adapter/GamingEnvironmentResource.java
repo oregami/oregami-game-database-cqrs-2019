@@ -5,17 +5,23 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.axonframework.eventsourcing.DomainEventMessage;
 import org.axonframework.eventsourcing.eventstore.DomainEventStream;
 import org.axonframework.eventsourcing.eventstore.EventStore;
+import org.oregami.common.EventHelper;
 import org.oregami.gamingEnvironments.application.GamingEnvironmentApplicationService;
 import org.oregami.gamingEnvironments.model.GamingEnvironmentRepository;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
+import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwarePlatform;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.Year;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by sebastian on 17.12.16.
@@ -28,13 +34,21 @@ public class GamingEnvironmentResource {
 
     private EventStore eventStore;
 
+    private EventHelper eventHelper;
+
     private GamingEnvironmentRepository gamingEnvironmentRepository;
 
     @Autowired
-    public GamingEnvironmentResource(GamingEnvironmentApplicationService gamingEnvironmentApplicationService, EventStore eventStore, GamingEnvironmentRepository gamingEnvironmentRepository) {
+    public GamingEnvironmentResource(
+            GamingEnvironmentApplicationService gamingEnvironmentApplicationService,
+            EventStore eventStore,
+            EventHelper eventHelper,
+            GamingEnvironmentRepository gamingEnvironmentRepository
+    ) {
         this.gamingEnvironmentApplicationService = gamingEnvironmentApplicationService;
         this.eventStore = eventStore;
         this.gamingEnvironmentRepository = gamingEnvironmentRepository;
+        this.eventHelper = eventHelper;
     }
 
     @PostMapping(value = "/create")
@@ -55,7 +69,7 @@ public class GamingEnvironmentResource {
     public String getOne(@PathVariable String gamingEnvironmentId, Model model) {
         RGamingEnvironment gamingEnvironment = gamingEnvironmentRepository.findById(gamingEnvironmentId).get();
         model.addAttribute("gamingEnvironment", gamingEnvironment);
-        model.addAttribute("events", getEventsForGamingEnvironmentAsStrings(gamingEnvironmentId));
+        model.addAttribute("events", getEventsForGamingEnvironmentAsStrings(gamingEnvironment));
         return "gamingEnvironments/one";
     }
 
@@ -96,22 +110,43 @@ public class GamingEnvironmentResource {
         return "gamingEnvironments/update_done";
     }
 
-    private List<Map<String, Object>> getEventsForGamingEnvironmentAsStrings(String gamingEnvironmentId) {
-        List<Map<String, Object>> result = new ArrayList<>();
-        DomainEventStream domainEventStream = eventStore.readEvents(gamingEnvironmentId);
-        Iterator<? extends DomainEventMessage<?>> iterator = domainEventStream.asStream().iterator();
-        while (iterator.hasNext()) {
-            LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-            DomainEventMessage<?> event = iterator.next();
-            map.put("Identifier", event.getIdentifier());
-            map.put("SequenceNumber", event.getSequenceNumber());
+    @GetMapping(value = "/{gamingEnvironmentId}/addNewHardwarePlatform")
+    public String addNewHardwareplatform(@PathVariable String gamingEnvironmentId, Model model) {
+        model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
+        model.addAttribute("nextUrl", "/gamingEnvironments/" + gamingEnvironmentId);
+        return "hardwarePlatforms/create";
+    }
 
-            map.put("Timestamp", event.getTimestamp());
-            map.put("Payload", event.getPayloadType().getSimpleName() + ": " + ToStringBuilder.reflectionToString(event.getPayload(), RecursiveToStringStyle.JSON_STYLE));
-            map.put("MetaData", ToStringBuilder.reflectionToString(event.getMetaData(), RecursiveToStringStyle.JSON_STYLE));
-            result.add(map);
+    @GetMapping(value = "/{gamingEnvironmentId}/addHardwarePlatform")
+    public RedirectView addHardwareplatform(
+            @PathVariable String gamingEnvironmentId
+            , @RequestParam String hardwarePlatformId
+            , Model model) {
+        CompletableFuture<Object> completableFuture = gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment(gamingEnvironmentId, hardwarePlatformId);
+        try {
+            completableFuture.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        RedirectView rv = new RedirectView();
+        rv.setUrl("/gamingEnvironments/" + gamingEnvironmentId);
+        return rv;
+    }
+
+    private Map<Instant,Map<String, Object>> getEventsForGamingEnvironmentAsStrings(RGamingEnvironment gamingEnvironment) {
+        Map<Instant, Map<String, Object>> result = new TreeMap<>();
+        result.putAll(eventHelper.getEventInformation(gamingEnvironment.getId()));
+
+        for (RHardwarePlatform h: gamingEnvironment.getHardwarePlatformSet()) {
+            result.putAll(eventHelper.getEventInformation(h.getId()));
         }
         return result;
     }
+
+
+
 
 }

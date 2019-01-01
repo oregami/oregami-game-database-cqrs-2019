@@ -7,14 +7,18 @@ import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.oregami.gamingEnvironments.command.AddHardwarePlatformToGamingEnvironmentCommand;
 import org.oregami.gamingEnvironments.command.AddYearOfFirstReleaseCommand;
 import org.oregami.gamingEnvironments.command.ChangeYearOfFirstReleaseCommand;
 import org.oregami.gamingEnvironments.command.CreateGamingEnvironmentCommand;
 import org.oregami.gamingEnvironments.event.GamingEnvironmentCreatedEvent;
+import org.oregami.gamingEnvironments.event.HardwarePlatformAddedToGamingEnvironmentEvent;
 import org.oregami.gamingEnvironments.event.YearOfFirstReleaseAddedEvent;
 import org.oregami.gamingEnvironments.event.YearOfFirstReleaseChangedEvent;
 
 import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sebastian on 03.11.16.
@@ -32,6 +36,7 @@ public class GamingEnvironment {
 
     Year yearOfFirstRelease;
 
+    List<String> hardwarePlatformIdList = new ArrayList<>();
 
 
     @CommandHandler
@@ -47,7 +52,7 @@ public class GamingEnvironment {
 
     @CommandHandler
     public void in(AddYearOfFirstReleaseCommand command) {
-        AggregateLifecycle.apply(new YearOfFirstReleaseAddedEvent(command.getId(), command.getYearOfFirstRelease()));
+        AggregateLifecycle.apply(new YearOfFirstReleaseAddedEvent(command.getGamingEnvironmentId(), command.getYearOfFirstRelease()));
     }
 
     @EventSourcingHandler
@@ -64,6 +69,16 @@ public class GamingEnvironment {
     @EventSourcingHandler
     public void in(YearOfFirstReleaseChangedEvent event) {
         this.yearOfFirstRelease = event.getYearOfFirstRelease();
+    }
+
+    @CommandHandler
+    public void in(AddHardwarePlatformToGamingEnvironmentCommand command) {
+        AggregateLifecycle.apply(new HardwarePlatformAddedToGamingEnvironmentEvent(command.getGamingEnvironmentId(), command.getHardwarePlatformId()));
+    }
+
+    @EventSourcingHandler
+    public void in(HardwarePlatformAddedToGamingEnvironmentEvent event) {
+        this.hardwarePlatformIdList.add(event.getHardwarePlatformId());
     }
 
 }

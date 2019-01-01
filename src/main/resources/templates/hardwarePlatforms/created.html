@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="header :: header" th:with="title=''"></head>
+
+<meta th:if="${nextUrl!=''}" http-equiv="refresh" th:attr="content=${'0; ' + nextUrl + '/addHardwarePlatform?hardwarePlatformId=' + hardwarePlatformId}" />
+
+<body>
+
+<nav th:replace="navigation :: navigation(URL_HARDWAREPLATFORMS)"></nav>
+
+<div class="ui segment">
+
+        <a th:href="@{/hardwarePlatforms/} + ${hardwarePlatformId}">view created hardware platform</a>
+</div>
+
+
+</body>
+</html>
