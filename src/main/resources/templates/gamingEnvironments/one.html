@@ -47,8 +47,50 @@
 
 <div class="ui segment">
     <div class="ui grey inverted top attached header" th:text="#{common.events}"/>
+
+    <table class="ui celled table" border="1">
+        <thead>
+            <th>Timestamp</th>
+            <th>User</th>
+            <th>Change</th>
+        </thead>
+        <tbody>
+        <tr th:each="event : ${events}">
+            <td>
+               <span th:text="${event.key}"></span>
+            </td>
+            <td>
+                <!--
+                <span th:text="${event.value.get('MetaData').get('userId')}"></span>
+                -->
+                <span th:text="${event.value.get('username')}"></span>
+            </td>
+            <td>
+                <strong><span class="ui teal label" th:text="${event.getValue().get('PayloadTypeSimple')}"></span></strong>
+                <span class="ui" th:text="${event.value.get('PayloadToString')}"/>
+                <!-- <div class="ui attached segment" th:text="${event.value}"/> -->
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--
+    <div th:each="event : ${events}" class="ui attached segment">
+        <div class="ui attached segment" th:text="${event.key}"/>
+        <div class="ui attached segment" th:text="${event.value.get('Identifier')}"/>
+        <div class="ui attached segment" th:text="${event.value}"/>
+
+    </div>
     <div th:each="event : ${events}" class="ui attached segment">
         <span th:text="${event.toString()}"/>
+    </div>
+    -->
+</div>
+
+<div class="ui segment" th:if="${(param.json != null) and (param.json[0] == 'true')}">
+    <div class="ui grey inverted top attached header" th:text="#{common.events} + ' (Json)'"/>
+    <div class="ui attached segment">
+        <span th:text="${eventsJson.toString()}"/>
     </div>
 </div>
 

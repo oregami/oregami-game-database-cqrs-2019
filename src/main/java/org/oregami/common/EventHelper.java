@@ -1,18 +1,18 @@
 package org.oregami.common;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.builder.RecursiveToStringStyle;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.axonframework.eventsourcing.DomainEventMessage;
 import org.axonframework.eventsourcing.eventstore.DomainEventStream;
 import org.axonframework.eventsourcing.eventstore.EventStore;
+import org.keycloak.KeycloakPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class EventHelper {
@@ -20,8 +20,10 @@ public class EventHelper {
     @Autowired
     private EventStore eventStore;
 
-    public Map<Instant, Map<String, Object>> getEventInformation(String aggregateId) {
-        Map<Instant, Map<String, Object>> result = new TreeMap<>();
+    public Map<String, Map<String, Object>> getEventInformation(String aggregateId) {
+        Map<String, Map<String, Object>> result = new TreeMap<>();
+
+        ObjectMapper mapper = new ObjectMapper();
 
         DomainEventStream domainEventStream = eventStore.readEvents(aggregateId);
         Iterator<? extends DomainEventMessage<?>> iterator = domainEventStream.asStream().iterator();
@@ -31,10 +33,34 @@ public class EventHelper {
             map.put("Identifier", event.getIdentifier());
             map.put("SequenceNumber", event.getSequenceNumber());
 
-            map.put("Timestamp", event.getTimestamp());
-            map.put("Payload", event.getPayloadType().getSimpleName() + ": " + ToStringBuilder.reflectionToString(event.getPayload(), RecursiveToStringStyle.JSON_STYLE));
-            map.put("MetaData", ToStringBuilder.reflectionToString(event.getMetaData(), RecursiveToStringStyle.JSON_STYLE));
-            result.put(event.getTimestamp(), map);
+            Date myDate = Date.from(event.getTimestamp());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:S");
+            String formattedDate = formatter.format(myDate);
+
+            map.put("Timestamp", formattedDate);
+            map.put("TimestampOriginalFormat", event.getTimestamp());
+            map.put("PayloadTypeSimple", event.getPayloadType().getSimpleName());
+            map.put("PayloadType", event.getPayloadType().getName());
+            map.put("Payload", event.getPayload());
+            try {
+                map.put("PayloadToString", mapper.writerWithDefaultPrettyPrinter().writeValueAsString(event.getPayload()));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+            map.put("MetaData", event.getMetaData());
+            map.put("MetaDataToString", ToStringBuilder.reflectionToString(event.getMetaData(), RecursiveToStringStyle.JSON_STYLE));
+
+            try {
+                map.put("username", ((KeycloakPrincipal)(event.getMetaData().get("userId"))).getKeycloakSecurityContext().getToken().getPreferredUsername());
+            } catch (ClassCastException e) {
+                map.put("username", event.getMetaData().get("userId"));
+            }
+
+
+
+            result.put(formattedDate, map);
+            //result.put(event.getTimestamp(), map);
         }
 
         return result;

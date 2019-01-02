@@ -1,9 +1,10 @@
 package org.oregami.gamingEnvironments.adapter;
 
-import org.apache.commons.lang3.builder.RecursiveToStringStyle;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.axonframework.eventsourcing.DomainEventMessage;
-import org.axonframework.eventsourcing.eventstore.DomainEventStream;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.oregami.common.EventHelper;
 import org.oregami.gamingEnvironments.application.GamingEnvironmentApplicationService;
@@ -16,10 +17,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.Year;
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -69,7 +70,23 @@ public class GamingEnvironmentResource {
     public String getOne(@PathVariable String gamingEnvironmentId, Model model) {
         RGamingEnvironment gamingEnvironment = gamingEnvironmentRepository.findById(gamingEnvironmentId).get();
         model.addAttribute("gamingEnvironment", gamingEnvironment);
-        model.addAttribute("events", getEventsForGamingEnvironmentAsStrings(gamingEnvironment));
+
+        Map<String, Map<String, Object>> eventMap = getEventsForGamingEnvironmentAsStrings(gamingEnvironment);
+        model.addAttribute("events", eventMap);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.PUBLIC_ONLY);
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+        try {
+            String events = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(eventMap);
+            model.addAttribute("eventsJson", events);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
         return "gamingEnvironments/one";
     }
 
@@ -136,8 +153,8 @@ public class GamingEnvironmentResource {
         return rv;
     }
 
-    private Map<Instant,Map<String, Object>> getEventsForGamingEnvironmentAsStrings(RGamingEnvironment gamingEnvironment) {
-        Map<Instant, Map<String, Object>> result = new TreeMap<>();
+    private Map<String,Map<String, Object>> getEventsForGamingEnvironmentAsStrings(RGamingEnvironment gamingEnvironment) {
+        Map<String, Map<String, Object>> result = new TreeMap<>();
         result.putAll(eventHelper.getEventInformation(gamingEnvironment.getId()));
 
         for (RHardwarePlatform h: gamingEnvironment.getHardwarePlatformSet()) {

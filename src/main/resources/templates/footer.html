@@ -9,12 +9,15 @@
 <div th:fragment="copy" style="text-align: left;width: 100%; display: block;">
     <br clear="all"/>
     <div class="footer">
-        &copy; 2017 oregami.org
+        &copy; 2019 oregami.org
     </div>
 
     <span id="debug">debug</span>
 
+
+    <th:block th:if="${(param.auth != null) and (param.auth[0] == 'true')}">
     <div class="ui segment" th:if="${loggedIn}">
+
         <div class="ui olive inverted top attached header" th:text="#{common.auth}"/>
         <div class="ui attached segment">
 
@@ -34,7 +37,9 @@
 
         </div>
     </div>
-</div>
+    </th:block>
+
+</th:block>
 
 
 </body>
