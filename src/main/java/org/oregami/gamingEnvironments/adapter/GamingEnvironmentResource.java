@@ -157,8 +157,8 @@ public class GamingEnvironmentResource {
         Map<String, Map<String, Object>> result = new TreeMap<>();
         result.putAll(eventHelper.getEventInformation(gamingEnvironment.getId()));
 
-        for (RHardwarePlatform h: gamingEnvironment.getHardwarePlatformSet()) {
-            result.putAll(eventHelper.getEventInformation(h.getId()));
+        if (gamingEnvironment.getHardwarePlatform()!=null) {
+            result.putAll(eventHelper.getEventInformation(gamingEnvironment.getHardwarePlatform().getId()));
         }
         return result;
     }

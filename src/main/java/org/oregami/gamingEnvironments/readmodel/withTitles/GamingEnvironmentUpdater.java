@@ -60,7 +60,7 @@ public class GamingEnvironmentUpdater {
     public void on(HardwarePlatformAddedToGamingEnvironmentEvent event) {
         RGamingEnvironment g = repository.getOne(event.getGamingEnvironmentId());
         RHardwarePlatform hardwarePlatform = hardwarePlatformRepository.findById(event.getHardwarePlatformId()).get();
-        g.getHardwarePlatformSet().add(hardwarePlatform);
+        g.setHardwarePlatform(hardwarePlatform);
         g.setChangeTime(LocalDateTime.now());
         repository.save(g);
     }

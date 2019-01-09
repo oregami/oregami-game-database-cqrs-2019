@@ -3,13 +3,10 @@ package org.oregami.gamingEnvironments.readmodel.withTitles;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.oregami.common.BaseEntityUUID;
-import org.springframework.core.OrderComparator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Created by sebastian on 03.11.16.
@@ -28,8 +25,8 @@ public class RGamingEnvironment extends BaseEntityUUID {
     @Column
     private LocalDateTime changeTime;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<RHardwarePlatform> hardwarePlatformSet = new TreeSet<>();
+    @OneToOne //(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private RHardwarePlatform hardwarePlatform;
 
     public RGamingEnvironment(String id, String workingTitle) {
         super(id);
@@ -56,11 +53,11 @@ public class RGamingEnvironment extends BaseEntityUUID {
         return workingTitle;
     }
 
-    public Set<RHardwarePlatform> getHardwarePlatformSet() {
-        return hardwarePlatformSet;
+    public RHardwarePlatform getHardwarePlatform() {
+        return hardwarePlatform;
     }
 
-    public void setHardwarePlatformSet(Set<RHardwarePlatform> hardwarePlatformSet) {
-        this.hardwarePlatformSet = hardwarePlatformSet;
+    public void setHardwarePlatform(RHardwarePlatform hardwarePlatform) {
+        this.hardwarePlatform = hardwarePlatform;
     }
 }
