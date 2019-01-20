@@ -2,7 +2,9 @@ package org.oregami.gamingEnvironments.readmodel.withTitles;
 
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
+import org.oregami.gamingEnvironments.event.HardwareModelAddedToHardwarePlatformEvent;
 import org.oregami.gamingEnvironments.event.HardwarePlatformCreatedEvent;
+import org.oregami.gamingEnvironments.model.HardwareModelRepository;
 import org.oregami.gamingEnvironments.model.HardwarePlatformRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,19 +18,34 @@ import java.time.LocalDateTime;
 @ProcessingGroup("HardwarePlatformUpdater")
 public class HardwarePlatformUpdater {
 
-
-    HardwarePlatformRepository repository;
+    HardwarePlatformRepository hardwarePlatformRepository;
+    HardwareModelRepository hardwareModelRepository;
 
     @Autowired
-    public HardwarePlatformUpdater(HardwarePlatformRepository repository) {
-        this.repository = repository;
+    public HardwarePlatformUpdater(
+            HardwarePlatformRepository hardwarePlatformRepository,
+            HardwareModelRepository hardwareModelRepository
+    ) {
+        this.hardwarePlatformRepository = hardwarePlatformRepository;
+        this.hardwareModelRepository = hardwareModelRepository;
     }
 
     @EventHandler
     public void on(HardwarePlatformCreatedEvent event) {
         RHardwarePlatform g = new RHardwarePlatform(event.getNewId(), event.getWorkingTitle());
         g.setChangeTime(LocalDateTime.now());
-        repository.save(g);
+        hardwarePlatformRepository.save(g);
     }
+
+
+    @EventHandler
+    public void on(HardwareModelAddedToHardwarePlatformEvent event) {
+        RHardwarePlatform hardwarePlatform = hardwarePlatformRepository.getOne(event.getHardwarePlatformId());
+        RHardwareModel hardwareModel = hardwareModelRepository.findById(event.getHardwareModelId()).get();
+        hardwarePlatform.getHardwareModelSet().add(hardwareModel);
+        hardwarePlatform.setChangeTime(LocalDateTime.now());
+        hardwarePlatformRepository.save(hardwarePlatform);
+    }
+
 
 }

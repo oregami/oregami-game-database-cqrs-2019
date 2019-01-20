@@ -10,6 +10,7 @@ import org.oregami.common.EventHelper;
 import org.oregami.gamingEnvironments.application.GamingEnvironmentApplicationService;
 import org.oregami.gamingEnvironments.model.GamingEnvironmentRepository;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
+import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwareModel;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwarePlatform;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -157,8 +158,12 @@ public class GamingEnvironmentResource {
         Map<String, Map<String, Object>> result = new TreeMap<>();
         result.putAll(eventHelper.getEventInformation(gamingEnvironment.getId()));
 
-        if (gamingEnvironment.getHardwarePlatform()!=null) {
-            result.putAll(eventHelper.getEventInformation(gamingEnvironment.getHardwarePlatform().getId()));
+        RHardwarePlatform hwp = gamingEnvironment.getHardwarePlatform();
+        if (hwp!=null) {
+            result.putAll(eventHelper.getEventInformation(hwp.getId()));
+            for (RHardwareModel hwm : hwp.getHardwareModelSet()) {
+                result.putAll(eventHelper.getEventInformation(hwm.getId()));
+            }
         }
         return result;
     }

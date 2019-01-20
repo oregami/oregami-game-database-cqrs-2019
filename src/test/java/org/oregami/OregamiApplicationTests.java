@@ -2,14 +2,14 @@ package org.oregami;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.oregami.gamingEnvironments.application.GamingEnvironmentApplicationService;
+import org.oregami.gamingEnvironments.application.HardwareModelApplicationService;
 import org.oregami.gamingEnvironments.application.HardwarePlatformApplicationService;
 import org.oregami.gamingEnvironments.model.GamingEnvironmentRepository;
+import org.oregami.gamingEnvironments.model.HardwareModelRepository;
 import org.oregami.gamingEnvironments.model.HardwarePlatformRepository;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwarePlatform;
@@ -37,6 +37,12 @@ public class OregamiApplicationTests {
     @Autowired
     private HardwarePlatformRepository hardwarePlatformRepository;
 
+    @Autowired
+    HardwareModelApplicationService hardwareModelApplicationService;
+
+    @Autowired
+    HardwareModelRepository hardwareModelRepository;
+
 
 	@Test
 	public void gamingEnvironmentApplicationServiceTest() {
@@ -52,26 +58,23 @@ public class OregamiApplicationTests {
         gamingEnvironmentApplicationService.addYearOfFirstRelease("idc64GE", Year.of(1982));
 
 
-        hardwarePlatformApplicationService.createNewHardwarePlatform("idc64HWP", "Original C64");
+        hardwarePlatformApplicationService.createNewHardwarePlatform("idc64HWP", "Commodore MOS machine & compatibles");
         RHardwarePlatform c64HWP = hardwarePlatformRepository.findById("idc64HWP").get();
         Assert.assertNotNull(c64HWP);
-        Assert.assertEquals("Original C64", c64HWP.getWorkingTitle());
-
-
-        hardwarePlatformApplicationService.createNewHardwarePlatform("idc64miniHWP", "The C64 mini");
-        RHardwarePlatform c64miniHWP = hardwarePlatformRepository.findById("idc64miniHWP").get();
-        Assert.assertNotNull(c64miniHWP);
-        Assert.assertEquals("The C64 mini", c64miniHWP.getWorkingTitle());
-
-        hardwarePlatformApplicationService.createNewHardwarePlatform("idc128HWP", "Commodore 128");
-        RHardwarePlatform c128HWP = hardwarePlatformRepository.findById("idc128HWP").get();
-        Assert.assertNotNull(c128HWP);
+        Assert.assertEquals("Commodore MOS machine & compatibles", c64HWP.getWorkingTitle());
 
         gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment("idc64GE", "idc64HWP");
-        gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment("idc64GE", "idc64miniHWP");
-        gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment("idc64GE", "idc128HWP");
 
 
+        hardwareModelApplicationService.createNewHardwareModel("idHmC64original", "original C64");
+        hardwareModelApplicationService.createNewHardwareModel("idHmC64-I", "C64-I");
+        hardwareModelApplicationService.createNewHardwareModel("idHmC64-II", "C64-II");
+        hardwareModelApplicationService.createNewHardwareModel("idHmC64-Mini", "The C64 Mini");
+
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform("idc64HWP", "idHmC64original");
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform("idc64HWP", "idHmC64-I");
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform("idc64HWP", "idHmC64-II");
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform("idc64HWP", "idHmC64-Mini");
 
         Optional<RGamingEnvironment> ge = gamingEnvironmentRepository.findById("idc64GE");
         //System.out.println(ToStringBuilder.reflectionToString(ge.get(), ToStringStyle.MULTI_LINE_STYLE));
@@ -82,6 +85,7 @@ public class OregamiApplicationTests {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+
 
 
     }

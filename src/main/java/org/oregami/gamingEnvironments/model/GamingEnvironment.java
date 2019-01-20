@@ -36,7 +36,7 @@ public class GamingEnvironment {
 
     Year yearOfFirstRelease;
 
-    List<String> hardwarePlatformIdList = new ArrayList<>();
+    String hardwarePlatformId = null;
 
 
     @CommandHandler
@@ -78,7 +78,7 @@ public class GamingEnvironment {
 
     @EventSourcingHandler
     public void in(HardwarePlatformAddedToGamingEnvironmentEvent event) {
-        this.hardwarePlatformIdList.add(event.getHardwarePlatformId());
+        this.hardwarePlatformId = event.getHardwarePlatformId();
     }
 
 }

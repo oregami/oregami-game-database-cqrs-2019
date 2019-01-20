@@ -81,5 +81,13 @@ public class HardwarePlatformResource {
         return "hardwarePlatforms/one";
     }
 
-
+    @GetMapping(value = "/{hardwarePlatformId}/addNewHardwareModel")
+    public String addNewHardwareModel(
+            @PathVariable String hardwarePlatformId,
+            @RequestParam String gamingEnvironmentId,
+            Model model) {
+        model.addAttribute("hardwarePlatformId", hardwarePlatformId);
+        model.addAttribute("nextUrl", "/gamingEnvironments/" + gamingEnvironmentId);
+        return "hardwareModels/create";
+    }
 }

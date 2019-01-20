@@ -20,13 +20,26 @@
     </div>
 
 
-    <h4 class="ui attached header" th:text="#{gamingEnvironment.hardwarePlatform}" th:if="${gamingEnvironment.hardwarePlatform}"></h4>
+    <th:block th:if="${gamingEnvironment.hardwarePlatform}">
+        <h4 class="ui attached header" th:text="#{gamingEnvironment.hardwarePlatform}"></h4>
 
-    <div class="ui attached segment" th:if="${gamingEnvironment.hardwarePlatform}">
-        <div>
-            <span th:text="${gamingEnvironment.hardwarePlatform.workingTitle}">hpf</span>
+        <div class="ui attached segment" th:if="${gamingEnvironment.hardwarePlatform}">
+            <div>
+                <span th:text="${gamingEnvironment.hardwarePlatform.workingTitle}">hpf</span>
+            </div>
         </div>
-    </div>
+
+        <th:block th:if="${gamingEnvironment.hardwarePlatform.hardwareModelSet.size()>0}">
+            <h4 class="ui attached header" th:text="#{gamingEnvironment.hardwareModels}"></h4>
+
+            <div class="ui attached segment">
+                <div th:each="hm : ${gamingEnvironment.hardwarePlatform.hardwareModelSet}">
+                    <span th:text="${hm.workingTitle}">hpm</span>
+                </div>
+            </div>
+
+        </th:block>
+    </th:block>
 
     <div class="ui grey inverted top attached header" th:text="#{common.actions}"/>
     <div class="ui attached segment">
@@ -36,9 +49,17 @@
         <a th:if="${gamingEnvironment.yearOfFirstRelease != null}" th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/changeYearOfFirstRelease'}">
             <button class="ui primary basic button" th:text="#{gamingEnvironment.changeYearOfFirstRelease}"/>
         </a>
+
+
         <a th:if="${gamingEnvironment.hardwarePlatform == null}" th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/addNewHardwarePlatform'}">
             <button class="ui primary basic button" th:text="#{gamingEnvironment.addNewHardwarePlatform}"/>
         </a>
+
+        <!--
+        <a th:if="${gamingEnvironment.hardwarePlatform}" th:href="${'/hardwarePlatforms/' + gamingEnvironment.hardwarePlatform.id + '/addNewHardwareModel?gamingEnvironmentId=' + gamingEnvironment.id}">
+            <button class="ui primary basic button" th:text="#{gamingEnvironment.addNewHardwareModel}"/>
+        </a>
+        -->
 
     </div>
 
