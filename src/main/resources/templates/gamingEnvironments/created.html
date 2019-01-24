@@ -5,6 +5,8 @@
 
 <head th:include="header :: header" th:with="title=''"></head>
 
+<meta http-equiv="refresh" th:attr="content=${'0; /gamingEnvironments/' + gamingEnvironmentId}" />
+
 <body>
 
 <nav th:replace="navigation :: navigation(URL_GAMINGENVIRONMENTS)"></nav>
