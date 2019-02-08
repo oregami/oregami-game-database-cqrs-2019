@@ -9,12 +9,12 @@ import java.time.Year;
 public class ChangeYearOfFirstReleaseCommand {
 
     @TargetAggregateIdentifier
-    private final String id;
+    private final String gamingEnvironmentId;
 
     private Year yearOfFirstRelease;
 
-    public ChangeYearOfFirstReleaseCommand(String id, Year yearOfFirstRelease) {
-        this.id = id;
+    public ChangeYearOfFirstReleaseCommand(String gamingEnvironmentId, Year yearOfFirstRelease) {
+        this.gamingEnvironmentId = gamingEnvironmentId;
         this.yearOfFirstRelease = yearOfFirstRelease;
     }
 
@@ -22,7 +22,7 @@ public class ChangeYearOfFirstReleaseCommand {
         return yearOfFirstRelease;
     }
 
-    public String getId() {
-        return id;
+    public String getGamingEnvironmentId() {
+        return gamingEnvironmentId;
     }
 }

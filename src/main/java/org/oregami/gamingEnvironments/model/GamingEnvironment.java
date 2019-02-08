@@ -62,7 +62,7 @@ public class GamingEnvironment {
 
     @CommandHandler
     public void in(ChangeYearOfFirstReleaseCommand command) {
-        AggregateLifecycle.apply(new YearOfFirstReleaseChangedEvent(command.getId(), command.getYearOfFirstRelease()));
+        AggregateLifecycle.apply(new YearOfFirstReleaseChangedEvent(command.getGamingEnvironmentId(), command.getYearOfFirstRelease()));
     }
 
 

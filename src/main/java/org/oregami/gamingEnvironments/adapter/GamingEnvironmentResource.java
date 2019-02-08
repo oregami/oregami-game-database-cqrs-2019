@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.oregami.common.EventHelper;
 import org.oregami.gamingEnvironments.application.GamingEnvironmentApplicationService;
+import org.oregami.gamingEnvironments.application.HardwareModelApplicationService;
+import org.oregami.gamingEnvironments.application.HardwarePlatformApplicationService;
 import org.oregami.gamingEnvironments.model.GamingEnvironmentRepository;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwareModel;
@@ -34,6 +36,10 @@ public class GamingEnvironmentResource {
 
     private GamingEnvironmentApplicationService gamingEnvironmentApplicationService;
 
+    private HardwareModelApplicationService hardwareModelApplicationService;
+
+    private HardwarePlatformApplicationService hardwarePlatformApplicationService;
+
     private EventStore eventStore;
 
     private EventHelper eventHelper;
@@ -43,11 +49,15 @@ public class GamingEnvironmentResource {
     @Autowired
     public GamingEnvironmentResource(
             GamingEnvironmentApplicationService gamingEnvironmentApplicationService,
+            HardwarePlatformApplicationService hardwarePlatformApplicationService,
+            HardwareModelApplicationService hardwareModelApplicationService,
             EventStore eventStore,
             EventHelper eventHelper,
             GamingEnvironmentRepository gamingEnvironmentRepository
     ) {
         this.gamingEnvironmentApplicationService = gamingEnvironmentApplicationService;
+        this.hardwarePlatformApplicationService = hardwarePlatformApplicationService;
+        this.hardwareModelApplicationService = hardwareModelApplicationService;
         this.eventStore = eventStore;
         this.gamingEnvironmentRepository = gamingEnvironmentRepository;
         this.eventHelper = eventHelper;
@@ -169,6 +179,34 @@ public class GamingEnvironmentResource {
     }
 
 
+
+    @GetMapping(value = "/{gamingEnvironmentId}/addHardwareModel")
+    public String addHardwareModel(
+            @PathVariable String gamingEnvironmentId
+            , Model model) {
+        model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
+        return "gamingEnvironments/createHardwareModel";
+    }
+
+
+    @PostMapping(value = "/{gamingEnvironmentId}/addHardwareModel")
+    public RedirectView addHardwareModelExecute(
+            @PathVariable String gamingEnvironmentId,
+            @RequestParam String workingTitle,
+            Model model) {
+
+        model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
+
+        RGamingEnvironment gamingEnvironment = gamingEnvironmentRepository.findById(gamingEnvironmentId).get();
+
+        String newHardwareModelId = UUID.randomUUID().toString();
+        hardwareModelApplicationService.createNewHardwareModel(newHardwareModelId, workingTitle);
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(gamingEnvironment.getHardwarePlatform().getId(), newHardwareModelId);
+
+        RedirectView rv = new RedirectView();
+        rv.setUrl("/gamingEnvironments/" + gamingEnvironmentId);
+        return rv;
+    }
 
 
 }

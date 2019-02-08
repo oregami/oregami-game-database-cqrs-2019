@@ -55,11 +55,11 @@
             <button class="ui primary basic button" th:text="#{gamingEnvironment.addNewHardwarePlatform}"/>
         </a>
 
-        <!--
-        <a th:if="${gamingEnvironment.hardwarePlatform}" th:href="${'/hardwarePlatforms/' + gamingEnvironment.hardwarePlatform.id + '/addNewHardwareModel?gamingEnvironmentId=' + gamingEnvironment.id}">
+
+        <!--<a th:if="${gamingEnvironment.hardwarePlatform}" th:href="${'/hardwarePlatforms/' + gamingEnvironment.hardwarePlatform.id + '/addNewHardwareModel?gamingEnvironmentId=' + gamingEnvironment.id}">-->
+        <a th:if="${gamingEnvironment.hardwarePlatform}" th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/addHardwareModel'}">
             <button class="ui primary basic button" th:text="#{gamingEnvironment.addNewHardwareModel}"/>
         </a>
-        -->
 
     </div>
 
