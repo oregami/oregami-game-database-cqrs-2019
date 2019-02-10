@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.axonframework.eventsourcing.eventstore.EventStore;
-import org.oregami.common.EventHelper;
+import org.oregami.common.*;
 import org.oregami.gamingEnvironments.application.GamingEnvironmentApplicationService;
 import org.oregami.gamingEnvironments.application.HardwareModelApplicationService;
 import org.oregami.gamingEnvironments.application.HardwarePlatformApplicationService;
@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.Year;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -67,6 +65,26 @@ public class GamingEnvironmentResource {
     public String create(@RequestParam String workingTitle, Model model) {
         String id = UUID.randomUUID().toString();
         CompletableFuture<Object> completableFuture = gamingEnvironmentApplicationService.createNewGamingEnvironment(id, workingTitle);
+
+        try {
+            Object result = completableFuture.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+
+            if (e.getCause() instanceof ValidationException) {
+                model.addAttribute("result", ((ValidationException) e.getCause()).getResult());
+                model.addAttribute("workingTitle", workingTitle);
+                return "gamingEnvironments/create";
+            } else {
+                List<CommonError> errors = new ArrayList<>();
+                errors.add(new CommonError(new CommonErrorContext("general"), e.getMessage()));
+                model.addAttribute("result", new CommonResult<>(errors));
+                model.addAttribute("workingTitle", workingTitle);
+                return "gamingEnvironments/create";
+            }
+        }
+
         model.addAttribute("gamingEnvironmentId", id);
         return "gamingEnvironments/created";
     }
@@ -190,7 +208,7 @@ public class GamingEnvironmentResource {
 
 
     @PostMapping(value = "/{gamingEnvironmentId}/addHardwareModel")
-    public RedirectView addHardwareModelExecute(
+    public String addHardwareModelExecute(
             @PathVariable String gamingEnvironmentId,
             @RequestParam String workingTitle,
             Model model) {
@@ -200,12 +218,36 @@ public class GamingEnvironmentResource {
         RGamingEnvironment gamingEnvironment = gamingEnvironmentRepository.findById(gamingEnvironmentId).get();
 
         String newHardwareModelId = UUID.randomUUID().toString();
-        hardwareModelApplicationService.createNewHardwareModel(newHardwareModelId, workingTitle);
+        CompletableFuture<Object> completableFuture = hardwareModelApplicationService.createNewHardwareModel(newHardwareModelId, workingTitle);
+
+        try {
+            Object result = completableFuture.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+
+            if (e.getCause() instanceof ValidationException) {
+                model.addAttribute("result", ((ValidationException) e.getCause()).getResult());
+                model.addAttribute("workingTitle", workingTitle);
+
+                model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
+                return("/gamingEnvironments/createHardwareModel");
+
+            } else {
+                List<CommonError> errors = new ArrayList<>();
+                errors.add(new CommonError(new CommonErrorContext("general"), e.getMessage()));
+                model.addAttribute("result", new CommonResult<>(errors));
+                model.addAttribute("workingTitle", workingTitle);
+                model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
+                return("/gamingEnvironments/createHardwareModel");
+
+            }
+        }
+
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(gamingEnvironment.getHardwarePlatform().getId(), newHardwareModelId);
 
-        RedirectView rv = new RedirectView();
-        rv.setUrl("/gamingEnvironments/" + gamingEnvironmentId);
-        return rv;
+        model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
+        return("/gamingEnvironments/update_done");
     }
 
 

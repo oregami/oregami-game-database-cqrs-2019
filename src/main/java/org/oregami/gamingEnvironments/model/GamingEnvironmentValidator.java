@@ -1,13 +1,59 @@
 package org.oregami.gamingEnvironments.model;
 
+import org.oregami.common.CommonError;
+import org.oregami.common.CommonErrorContext;
+import org.oregami.common.CommonResult;
+import org.oregami.gamingEnvironments.command.CreateGamingEnvironmentCommand;
+import org.oregami.gamingEnvironments.command.CreateHardwareModelCommand;
+import org.oregami.gamingEnvironments.command.CreateHardwarePlatformCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class GamingEnvironmentValidator {
 
     @Autowired
     GamingEnvironmentRepository gamingEnvironmentRepository;
+
+
+    public CommonResult<Object> validate(CreateGamingEnvironmentCommand c) {
+        return validateWorkingTitle(c.getWorkingTitle());
+    }
+
+    public CommonResult<Object> validate(CreateHardwarePlatformCommand c) {
+        return validateWorkingTitle(c.getWorkingTitle());
+    }
+
+    public CommonResult<Object> validate(CreateHardwareModelCommand c) {
+        return validateWorkingTitle(c.getWorkingTitle());
+    }
+
+    private CommonResult<Object> validateWorkingTitle(String workingTitle) {
+        List<CommonError> errors = new ArrayList<>();
+
+        if (StringUtils.isEmpty(workingTitle)) {
+            CommonError empty = new CommonError(new CommonErrorContext("workingTitle"), "MSG_WORKING_TITLE_EMPTY");
+            errors.add(empty);
+        } else {
+            if(workingTitle.length()<2) {
+                CommonError empty = new CommonError(new CommonErrorContext("workingTitle"), "MSG_WORKING_TITLE_TOO_SHORT");
+                errors.add(empty);
+            }
+        }
+
+        CommonResult<Object> result = new CommonResult<Object>(errors);
+        return result;
+    }
+
+
+
+
+
+
 
     /*
     public CommonResult<Object> validate(AddTitleUsageCommand c) {

@@ -1,8 +1,12 @@
 package org.oregami.gamingEnvironments.command;
 
+import org.oregami.common.CommandValidator;
+import org.oregami.gamingEnvironments.model.GamingEnvironmentValidator;
+
 /**
  * Created by sebastian on 24.02.17.
  */
+@CommandValidator(GamingEnvironmentValidator.class)
 public class CreateHardwarePlatformCommand {
 
     private final String newId;

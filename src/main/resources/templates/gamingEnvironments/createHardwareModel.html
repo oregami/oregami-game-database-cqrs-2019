@@ -19,7 +19,7 @@
     <form class="ui form" method="POST" th:attr="action=${'/gamingEnvironments/' + gamingEnvironmentId + '/addHardwareModel'}">
         <h2 class="ui dividing header">Create new Hardware Model</h2>
 
-        <div class="inline field">
+        <div class="inline field" th:classappend="${result?.fieldHasError('workingTitle')} ? 'error' : ''">
             <label>Working title:</label>
             <input type="text" name="workingTitle"/>
         </div>
@@ -33,6 +33,19 @@
         <button class="ui button" type="submit">create hardware model</button>
     </form>
 
+</div>
+
+<div class="ui segments" th:if="${result}">
+    <div class="ui segment">
+        <p class="ui red label">Errors</p>
+    </div>
+    <div class="ui segments">
+        <div class="ui segment" th:each="error: ${result.errors}">
+            <span th:text="#{${error.messageName}}"></span>
+            <br/>
+            <span style="font-size: 80%;" th:text="${' (' + error.context.field + ')'}"></span>
+        </div>
+    </div>
 </div>
 
 <div th:replace="footer :: copy"></div>

@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.axonframework.eventsourcing.DomainEventMessage;
 import org.axonframework.eventsourcing.eventstore.DomainEventStream;
 import org.axonframework.eventsourcing.eventstore.EventStore;
-import org.oregami.common.EventHelper;
+import org.oregami.common.*;
 import org.oregami.gamingEnvironments.application.HardwarePlatformApplicationService;
 import org.oregami.gamingEnvironments.model.HardwarePlatformRepository;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by sebastian on 17.12.16.
@@ -61,8 +62,29 @@ public class HardwarePlatformResource {
                          ) {
         String id = UUID.randomUUID().toString();
         CompletableFuture<Object> completableFuture = hardwarePlatformApplicationService.createNewHardwarePlatform(id, workingTitle);
-        model.addAttribute("hardwarePlatformId", id);
         model.addAttribute("nextUrl", nextUrl);
+
+        try {
+            Object result = completableFuture.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+
+            if (e.getCause() instanceof ValidationException) {
+                model.addAttribute("result", ((ValidationException) e.getCause()).getResult());
+                model.addAttribute("workingTitle", workingTitle);
+                return "gamingEnvironments/create";
+            } else {
+                List<CommonError> errors = new ArrayList<>();
+                errors.add(new CommonError(new CommonErrorContext("general"), e.getMessage()));
+                model.addAttribute("result", new CommonResult<>(errors));
+                model.addAttribute("workingTitle", workingTitle);
+
+                return "hardwarePlatforms/create";
+            }
+        }
+
+        model.addAttribute("hardwarePlatformId", id);
 
         return "hardwarePlatforms/created";
     }
