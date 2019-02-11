@@ -137,7 +137,7 @@ public class GamingEnvironmentResource {
             , Model model) {
         gamingEnvironmentApplicationService.addYearOfFirstRelease(gamingEnvironmentId, yearOfFirstRelease);
         model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
-        return "gamingEnvironments/update_done";
+        return "gamingEnvironments/updateDone";
     }
 
     @GetMapping(value = "/{gamingEnvironmentId}/changeYearOfFirstRelease")
@@ -153,7 +153,7 @@ public class GamingEnvironmentResource {
             , Model model) {
         gamingEnvironmentApplicationService.changeYearOfFirstRelease(gamingEnvironmentId, yearOfFirstRelease);
         model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
-        return "gamingEnvironments/update_done";
+        return "gamingEnvironments/updateDone";
     }
 
     @GetMapping(value = "/{gamingEnvironmentId}/addNewHardwarePlatform")
@@ -247,7 +247,7 @@ public class GamingEnvironmentResource {
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(gamingEnvironment.getHardwarePlatform().getId(), newHardwareModelId);
 
         model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
-        return("/gamingEnvironments/update_done");
+        return("gamingEnvironments/updateDone");
     }
 
 
