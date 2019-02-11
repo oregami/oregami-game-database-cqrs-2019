@@ -231,7 +231,7 @@ public class GamingEnvironmentResource {
                 model.addAttribute("workingTitle", workingTitle);
 
                 model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
-                return("/gamingEnvironments/createHardwareModel");
+                return("gamingEnvironments/createHardwareModel");
 
             } else {
                 List<CommonError> errors = new ArrayList<>();
@@ -239,7 +239,7 @@ public class GamingEnvironmentResource {
                 model.addAttribute("result", new CommonResult<>(errors));
                 model.addAttribute("workingTitle", workingTitle);
                 model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
-                return("/gamingEnvironments/createHardwareModel");
+                return("gamingEnvironments/createHardwareModel");
 
             }
         }
