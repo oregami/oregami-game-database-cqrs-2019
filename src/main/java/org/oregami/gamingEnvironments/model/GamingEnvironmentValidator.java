@@ -57,7 +57,7 @@ public class GamingEnvironmentValidator {
             CommonError error = new CommonError(new CommonErrorContext("yearOfFirstRelease"), "MSG_YEAR_EMPTY");
             errors.add(error);
         } else if (c.getYearOfFirstRelease().getValue() < 1900 || c.getYearOfFirstRelease().getValue() > 2100) {
-            CommonError error = new CommonError(new CommonErrorContext("workingTitle"), "MSG_YEAR_NOT_VALID");
+            CommonError error = new CommonError(new CommonErrorContext("yearOfFirstRelease"), "MSG_YEAR_NOT_VALID");
             errors.add(error);
         }
 
