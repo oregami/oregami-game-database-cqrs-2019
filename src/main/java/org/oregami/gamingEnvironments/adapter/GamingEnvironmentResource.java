@@ -15,11 +15,14 @@ import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwareModel;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwarePlatform;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionFailedException;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Year;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -133,9 +136,31 @@ public class GamingEnvironmentResource {
 
     @PostMapping(value = "/{gamingEnvironmentId}/addYearOfFirstRelease")
     public String addYearOfFirstRelease(@PathVariable String gamingEnvironmentId
-            , @RequestParam Year yearOfFirstRelease
+            , @RequestParam String yearOfFirstRelease
             , Model model) {
-        gamingEnvironmentApplicationService.addYearOfFirstRelease(gamingEnvironmentId, yearOfFirstRelease);
+
+        try {
+
+            Year yearOfFirstReleaseYear = Year.of(Integer.parseInt(yearOfFirstRelease));
+            CompletableFuture<Object> completableFuture = gamingEnvironmentApplicationService.addYearOfFirstRelease(gamingEnvironmentId, yearOfFirstReleaseYear);
+            Object result = completableFuture.get();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException | NumberFormatException e) {
+            if (e.getCause() instanceof ValidationException) {
+                model.addAttribute("result", ((ValidationException) e.getCause()).getResult());
+                model.addAttribute("yearOfFirstRelease", yearOfFirstRelease);
+                return "gamingEnvironments/addYearOfFirstRelease";
+            } else {
+                List<CommonError> errors = new ArrayList<>();
+                errors.add(new CommonError(new CommonErrorContext("general"), e.getMessage()));
+                model.addAttribute("result", new CommonResult<>(errors));
+                model.addAttribute("yearOfFirstRelease", yearOfFirstRelease);
+                return "gamingEnvironments/addYearOfFirstRelease";
+            }
+        }
+
         model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
         return "gamingEnvironments/updateDone";
     }
@@ -250,5 +275,10 @@ public class GamingEnvironmentResource {
         return("gamingEnvironments/updateDone");
     }
 
+
+    @ExceptionHandler(value = ConversionFailedException.class)
+    public String catchConversionException(HttpServletRequest request, Exception ex) {
+        return "/index";
+    }
 
 }

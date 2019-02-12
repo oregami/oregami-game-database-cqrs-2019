@@ -21,15 +21,25 @@
         <form class="ui form" method="POST" th:attr="action=${'/gamingEnvironments/' + gamingEnvironmentId + '/addYearOfFirstRelease'}">
             <div class="inline field">
                 <label>First release year:</label>
-                <input name="yearOfFirstRelease" type="text"/>
+                <input name="yearOfFirstRelease" type="text"th:value="${yearOfFirstRelease}"/>
             </div>
             <button class="ui button" type="submit">save</button>
             <input type="hidden" name="backUrl" th:value="${'/gamingEnvironments/' + gamingEnvironmentId}"/>
         </form>
     </div>
+</div>
 
-
-
+<div class="ui segments" th:if="${result}">
+    <div class="ui segment">
+        <p class="ui red label">Errors</p>
+    </div>
+    <div class="ui segments">
+        <div class="ui segment" th:each="error: ${result.errors}">
+            <span th:text="#{${error.messageName}}"></span>
+            <br/>
+            <span style="font-size: 80%;" th:text="${' (' + error.context.field + ')'}"></span>
+        </div>
+    </div>
 </div>
 
 <div th:replace="footer :: copy"></div>

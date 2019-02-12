@@ -3,6 +3,7 @@ package org.oregami.gamingEnvironments.model;
 import org.oregami.common.CommonError;
 import org.oregami.common.CommonErrorContext;
 import org.oregami.common.CommonResult;
+import org.oregami.gamingEnvironments.command.AddYearOfFirstReleaseCommand;
 import org.oregami.gamingEnvironments.command.CreateGamingEnvironmentCommand;
 import org.oregami.gamingEnvironments.command.CreateHardwareModelCommand;
 import org.oregami.gamingEnvironments.command.CreateHardwarePlatformCommand;
@@ -47,6 +48,20 @@ public class GamingEnvironmentValidator {
 
         CommonResult<Object> result = new CommonResult<Object>(errors);
         return result;
+    }
+
+
+    public CommonResult<Object> validate(AddYearOfFirstReleaseCommand c) {
+        List<CommonError> errors = new ArrayList<>();
+        if (c.getYearOfFirstRelease()==null) {
+            CommonError error = new CommonError(new CommonErrorContext("yearOfFirstRelease"), "MSG_YEAR_EMPTY");
+            errors.add(error);
+        } else if (c.getYearOfFirstRelease().getValue() < 1900 || c.getYearOfFirstRelease().getValue() > 2100) {
+            CommonError error = new CommonError(new CommonErrorContext("workingTitle"), "MSG_YEAR_NOT_VALID");
+            errors.add(error);
+        }
+
+        return new CommonResult<Object>(errors);
     }
 
 
