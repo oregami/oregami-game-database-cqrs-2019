@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+
+<head th:include="header :: header" th:with="title='Hardware Platforms - create'"></head>
+
+
+<body>
+
+<nav th:replace="navigation :: navigation(URL_HARDWAREPLATFORMS)"></nav>
+
+<div th:replace="loginfirst :: copy"></div>
+
+<div class="ui segment" sec:authorize="isAuthenticated()">
+
+    <form class="ui form" method="POST" th:attr="action=@{/hardwarePlatforms/edit/create/}">
+        <h2 class="ui dividing header">Create new Hardware Platform</h2>
+
+        <div class="inline field" th:classappend="${result?.fieldHasError('workingTitle')} ? 'error' : ''">
+            <label>Working title:</label>
+            <input type="text" name="workingTitle"/>
+        </div>
+
+        <div class="inline field" th:classappend="${result?.fieldHasError('hardwarePlatformType')} ? 'error' : ''">
+            <label>hardwarePlatformType:</label>
+            <select name="hardwarePlatformType">
+                <option value="">-</option>
+                <option th:each="hpt: ${availableHardwarePlatformTypes}" th:value="${hpt}" th:text="#{'' + ${hpt}}"></option>
+                <!--<option th:value="'HOME_COMPUTERS_EUROPE_NORTHAMERICA'" th:text="HOME_COMPUTERS_EUROPE_NORTHAMERICA" th:selected="${hardwarePlatformType == 'HOME_COMPUTERS_EUROPE_NORTHAMERICA'}"></option>-->
+                <!--<option th:value="'CONSOLES_EUROPE_NORTHAMERICA'" th:text="CONSOLES_EUROPE_NORTHAMERICA" th:selected="${hardwarePlatformType == 'CONSOLES_EUROPE_NORTHAMERICA'}"></option>-->
+            </select>
+        </div>
+
+
+
+        <th:block th:if="${gamingEnvironmentId}">
+            <input type="hidden" name="gamingEnvironmentId" th:value="${gamingEnvironmentId}"/>
+            <input type="hidden" name="nextUrl" th:value="${nextUrl}"/>
+        </th:block>
+
+        <button class="ui button" type="submit">create hardware platform</button>
+    </form>
+
+</div>
+
+<div class="ui segments" th:if="${result}">
+    <div class="ui segment">
+        <p class="ui red label">Errors</p>
+    </div>
+    <div class="ui segments">
+        <div class="ui segment" th:each="error: ${result.errors}">
+            <span th:text="#{${error.messageName}}"></span>
+            <br/>
+            <span style="font-size: 80%;" th:text="${' (' + error.context.field + ')'}"></span>
+        </div>
+    </div>
+</div>
+
+<div th:replace="footer :: copy"></div>
+
+
+</body>
+</html>

@@ -28,7 +28,7 @@ public class HardwareModelUpdater {
 
     @EventHandler
     public void on(HardwareModelCreatedEvent event) {
-        RHardwareModel r = new RHardwareModel(event.getNewId(), event.getWorkingTitle());
+        RHardwareModel r = new RHardwareModel(event.getNewId(), event.getWorkingTitle(), event.getHardwareModelType()==null?null:event.getHardwareModelType().name());
         r.setChangeTime(LocalDateTime.now());
         hardwareModelRepository.save(r);
     }

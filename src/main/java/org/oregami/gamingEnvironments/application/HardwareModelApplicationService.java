@@ -2,6 +2,7 @@ package org.oregami.gamingEnvironments.application;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.oregami.gamingEnvironments.command.CreateHardwareModelCommand;
+import org.oregami.gamingEnvironments.model.types.HardwareModelType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,8 @@ public class HardwareModelApplicationService {
         this.commandGateway = commandGateway;
     }
 
-    public CompletableFuture<Object> createNewHardwareModel(String newId, String workingTitle) {
-        return commandGateway.send(new CreateHardwareModelCommand(newId, workingTitle));
+    public CompletableFuture<Object> createNewHardwareModel(String newId, String workingTitle, HardwareModelType hardwareModelType) {
+        return commandGateway.send(new CreateHardwareModelCommand(newId, workingTitle, hardwareModelType));
     }
 
 

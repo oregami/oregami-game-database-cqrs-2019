@@ -18,7 +18,7 @@
 <div class="ui segment" sec:authorize="isAuthenticated()">
 
     <div>
-        <form class="ui form" method="POST" th:attr="action=${'/gamingEnvironments/' + gamingEnvironmentId + '/addYearOfFirstRelease'}">
+        <form class="ui form" method="POST" th:attr="action=${'/gamingEnvironments/edit/' + gamingEnvironmentId + '/addYearOfFirstRelease'}">
             <div class="inline field">
                 <label>First release year:</label>
                 <input name="yearOfFirstRelease" type="text"th:value="${yearOfFirstRelease}"/>

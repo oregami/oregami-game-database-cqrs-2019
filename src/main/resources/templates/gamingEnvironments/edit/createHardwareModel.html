@@ -5,30 +5,32 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
 
-<head th:include="header :: header" th:with="title='Hardware Platforms - create'"></head>
+<head th:include="header :: header" th:with="title='Hardware Models - create'"></head>
 
 
 <body>
 
-<nav th:replace="navigation :: navigation(URL_HARDWAREPLATFORMS)"></nav>
+<nav th:replace="navigation :: navigation(URL_GAMINGENVIRONMENTS)"></nav>
 
 <div th:replace="loginfirst :: copy"></div>
 
 <div class="ui segment" sec:authorize="isAuthenticated()">
 
-    <form class="ui form" method="POST" th:attr="action=@{/hardwarePlatforms/create/}">
-        <h2 class="ui dividing header">Create new Hardware Platform</h2>
+    <form class="ui form" method="POST" th:attr="action=${'/gamingEnvironments/edit/' + gamingEnvironmentId + '/addHardwareModel'}">
+        <h2 class="ui dividing header">Create new Hardware Model</h2>
 
         <div class="inline field" th:classappend="${result?.fieldHasError('workingTitle')} ? 'error' : ''">
             <label>Working title:</label>
             <input type="text" name="workingTitle"/>
         </div>
 
-        <th:block th:if="${gamingEnvironmentId}">
-            <input type="hidden" name="nextUrl" th:value="${nextUrl}"/>
+        <th:block th:if="${hardwarePlatformId}">
+            gamingEnvironmentId: <input type="text" th:value="${gamingEnvironmentId}"/>
+            hardwarePlatformId: <input type="text" th:value="${hardwarePlatformId}"/>
+            nextUrl:  <input type="text" name="nextUrl" th:value="${nextUrl}"/>
         </th:block>
 
-        <button class="ui button" type="submit">create hardware platform</button>
+        <button class="ui button" type="submit">create hardware model</button>
     </form>
 
 </div>

@@ -13,6 +13,7 @@ import org.oregami.gamingEnvironments.command.CreateHardwarePlatformCommand;
 import org.oregami.gamingEnvironments.event.HardwareModelAddedToHardwarePlatformEvent;
 import org.oregami.gamingEnvironments.event.HardwarePlatformAddedToGamingEnvironmentEvent;
 import org.oregami.gamingEnvironments.event.HardwarePlatformCreatedEvent;
+import org.oregami.gamingEnvironments.model.types.HardwarePlatformType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,9 @@ public class HardwarePlatform {
     @AggregateIdentifier
     private String id;
 
-    String workingTitle;
+    private String workingTitle;
+
+    private HardwarePlatformType hardwarePlatformType;
 
     List<String> hardwareModelIdList = new ArrayList<>();
 
@@ -37,7 +40,7 @@ public class HardwarePlatform {
 
     @CommandHandler
     public HardwarePlatform(CreateHardwarePlatformCommand command) {
-        AggregateLifecycle.apply(new HardwarePlatformCreatedEvent(command.getId(), command.getWorkingTitle()));
+        AggregateLifecycle.apply(new HardwarePlatformCreatedEvent(command.getId(), command.getWorkingTitle(), command.getHardwarePlatformType()));
     }
 
     @EventSourcingHandler

@@ -32,7 +32,7 @@ public class HardwarePlatformUpdater {
 
     @EventHandler
     public void on(HardwarePlatformCreatedEvent event) {
-        RHardwarePlatform g = new RHardwarePlatform(event.getNewId(), event.getWorkingTitle());
+        RHardwarePlatform g = new RHardwarePlatform(event.getNewId(), event.getWorkingTitle(), event.getHardwarePlatformType().name());
         g.setChangeTime(LocalDateTime.now());
         hardwarePlatformRepository.save(g);
     }

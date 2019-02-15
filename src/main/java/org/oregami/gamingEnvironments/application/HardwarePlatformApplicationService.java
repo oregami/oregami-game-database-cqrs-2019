@@ -2,8 +2,8 @@ package org.oregami.gamingEnvironments.application;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.oregami.gamingEnvironments.command.AddHardwareModelToHardwarePlatformCommand;
-import org.oregami.gamingEnvironments.command.AddHardwarePlatformToGamingEnvironmentCommand;
 import org.oregami.gamingEnvironments.command.CreateHardwarePlatformCommand;
+import org.oregami.gamingEnvironments.model.types.HardwarePlatformType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +22,8 @@ public class HardwarePlatformApplicationService {
         this.commandGateway = commandGateway;
     }
 
-    public CompletableFuture<Object> createNewHardwarePlatform(String newId, String workingTitle) {
-        return commandGateway.send(new CreateHardwarePlatformCommand(newId, workingTitle));
+    public CompletableFuture<Object> createNewHardwarePlatform(String newId, String workingTitle, HardwarePlatformType hardwarePlatformType) {
+        return commandGateway.send(new CreateHardwarePlatformCommand(newId, workingTitle, hardwarePlatformType));
     }
 
 

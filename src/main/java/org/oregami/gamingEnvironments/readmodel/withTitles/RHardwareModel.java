@@ -20,9 +20,13 @@ public class RHardwareModel extends BaseEntityUUID {
     @Column
     private LocalDateTime changeTime;
 
-    public RHardwareModel(String id, String workingTitle) {
+    @Column
+    private String hardwareModelType;
+
+    public RHardwareModel(String id, String workingTitle, String hardwareModelType) {
         super(id);
         this.workingTitle = workingTitle;
+        this.hardwareModelType = hardwareModelType;
     }
 
     public void setChangeTime(LocalDateTime changeTime) {
@@ -35,6 +39,10 @@ public class RHardwareModel extends BaseEntityUUID {
 
     public String getWorkingTitle() {
         return workingTitle;
+    }
+
+    public String getHardwareModelType() {
+        return hardwareModelType;
     }
 
 }

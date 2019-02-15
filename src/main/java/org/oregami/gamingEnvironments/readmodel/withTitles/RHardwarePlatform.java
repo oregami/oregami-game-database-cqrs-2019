@@ -26,9 +26,13 @@ public class RHardwarePlatform extends BaseEntityUUID {
     @Column
     private LocalDateTime changeTime;
 
-    public RHardwarePlatform(String id, String workingTitle) {
+    @Column
+    private String hardwarePlatformType;
+
+    public RHardwarePlatform(String id, String workingTitle, String hardwarePlatformType) {
         super(id);
         this.workingTitle = workingTitle;
+        this.hardwarePlatformType = hardwarePlatformType;
     }
 
     public void setChangeTime(LocalDateTime changeTime) {
@@ -50,4 +54,9 @@ public class RHardwarePlatform extends BaseEntityUUID {
     public void setHardwareModelSet(Set<RHardwareModel> hardwareModelSet) {
         this.hardwareModelSet = hardwareModelSet;
     }
+
+    public String getHardwarePlatformType() {
+        return hardwarePlatformType;
+    }
+
 }

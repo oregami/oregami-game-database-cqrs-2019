@@ -26,6 +26,9 @@
         <div class="ui attached segment" th:if="${gamingEnvironment.hardwarePlatform}">
             <div>
                 <span th:text="${gamingEnvironment.hardwarePlatform.workingTitle}">hpf</span>
+                <th:block th:if="${gamingEnvironment.hardwarePlatform.hardwarePlatformType}">
+                (<span th:text="#{'' + ${gamingEnvironment.hardwarePlatform.hardwarePlatformType}}">hptype</span>)
+                </th:block>
             </div>
         </div>
 
@@ -35,6 +38,9 @@
             <div class="ui attached segment">
                 <div th:each="hm : ${gamingEnvironment.hardwarePlatform.hardwareModelSet}">
                     <span th:text="${hm.workingTitle}">hpm</span>
+                    <th:block th:if="${hm.hardwareModelType!=null && hm.hardwareModelType != ''}">
+                        (<span th:text="#{'' + ${hm.hardwareModelType}}">hmt</span>)
+                    </th:block>
                 </div>
             </div>
 
@@ -43,21 +49,21 @@
 
     <div class="ui grey inverted top attached header" th:text="#{common.actions}"/>
     <div class="ui attached segment">
-        <a th:if="${gamingEnvironment.yearOfFirstRelease == null}" th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/addYearOfFirstRelease'}">
+        <a th:if="${gamingEnvironment.yearOfFirstRelease == null}" th:href="${'/gamingEnvironments/edit/' + gamingEnvironment.id + '/addYearOfFirstRelease'}">
             <button class="ui primary basic button" th:text="#{gamingEnvironment.addYearOfFirstRelease}"/>
         </a>
-        <a th:if="${gamingEnvironment.yearOfFirstRelease != null}" th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/changeYearOfFirstRelease'}">
+        <a th:if="${gamingEnvironment.yearOfFirstRelease != null}" th:href="${'/gamingEnvironments/edit/' + gamingEnvironment.id + '/changeYearOfFirstRelease'}">
             <button class="ui primary basic button" th:text="#{gamingEnvironment.changeYearOfFirstRelease}"/>
         </a>
 
 
-        <a th:if="${gamingEnvironment.hardwarePlatform == null}" th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/addNewHardwarePlatform'}">
+        <a th:if="${gamingEnvironment.hardwarePlatform == null}" th:href="${'/gamingEnvironments/edit/' + gamingEnvironment.id + '/addNewHardwarePlatform'}">
             <button class="ui primary basic button" th:text="#{gamingEnvironment.addNewHardwarePlatform}"/>
         </a>
 
 
         <!--<a th:if="${gamingEnvironment.hardwarePlatform}" th:href="${'/hardwarePlatforms/' + gamingEnvironment.hardwarePlatform.id + '/addNewHardwareModel?gamingEnvironmentId=' + gamingEnvironment.id}">-->
-        <a th:if="${gamingEnvironment.hardwarePlatform}" th:href="${'/gamingEnvironments/' + gamingEnvironment.id + '/addHardwareModel'}">
+        <a th:if="${gamingEnvironment.hardwarePlatform}" th:href="${'/gamingEnvironments/edit/' + gamingEnvironment.id + '/addHardwareModel'}">
             <button class="ui primary basic button" th:text="#{gamingEnvironment.addNewHardwareModel}"/>
         </a>
 
