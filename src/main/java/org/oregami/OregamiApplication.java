@@ -16,7 +16,6 @@ public class OregamiApplication {
         ConfigurableApplicationContext context = SpringApplication.run(OregamiApplication.class, args);
 
         System.out.println("LocaleResolver: " + context.getBean(LocaleResolver.class).toString());
-        System.out.println("Buildtimestamp: " + context.getBean(OregamiBuildInfo.class).getBuildTimestamp());
 
 	}
 }
