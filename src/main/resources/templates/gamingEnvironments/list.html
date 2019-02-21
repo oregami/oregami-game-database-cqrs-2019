@@ -11,6 +11,7 @@
 
 <div class="ui segment">
 
+    <!--
     <div th:each="gamingEnvironment : ${list}">
 
             <h2 class="ui top attached header">
@@ -20,6 +21,18 @@
             </h2>
 
     </div>
+    -->
+
+
+    <h2 class="ui top attached header" th:each="entry : ${gamingEnvironmentMap}">
+        <div class="content" th:text="#{'' + ${entry.key}}"></div>
+        <div th:each="gamingEnvironment : ${entry.value}" class="ui raised segment">
+            <h2><i class="fas fa-gamepad"></i>
+            <a th:href="${'/gamingEnvironments/' + gamingEnvironment.id}">
+                <span th:text="${gamingEnvironment.workingTitle}"/>
+            </a></h2>
+        </div>
+    </h2>
 
     <div class="ui grey inverted top attached header" th:text="#{common.actions}"/>
     <div class="ui attached segment">

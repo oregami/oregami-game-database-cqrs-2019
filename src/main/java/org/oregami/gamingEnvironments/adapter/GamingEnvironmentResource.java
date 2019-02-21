@@ -21,8 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by sebastian on 17.12.16.
@@ -62,7 +61,28 @@ public class GamingEnvironmentResource {
 
     @GetMapping
     public String getAll(Model model) {
-        model.addAttribute("list", gamingEnvironmentRepository.findAll());
+        List<RGamingEnvironment> list = gamingEnvironmentRepository.findAll();
+        model.addAttribute("list", list);
+
+
+        Map<String, List<RGamingEnvironment>> gamingEnvironmentMap = new TreeMap<>();
+        for (RGamingEnvironment g: list) {
+            if (g.getHardwarePlatform()!=null && g.getHardwarePlatform().getHardwarePlatformType()!=null) {
+                String type = g.getHardwarePlatform().getHardwarePlatformType();
+                if (gamingEnvironmentMap.get(type)==null) {
+                    gamingEnvironmentMap.put(type, new ArrayList<>());
+                }
+                gamingEnvironmentMap.get(type).add(g);
+            } else {
+                String type = "unknown";
+                if (gamingEnvironmentMap.get(type)==null) {
+                    gamingEnvironmentMap.put(type, new ArrayList<>());
+                }
+                gamingEnvironmentMap.get(type).add(g);
+            }
+            g.getHardwarePlatform().getHardwarePlatformType();
+        }
+        model.addAttribute("gamingEnvironmentMap", gamingEnvironmentMap);
         return "gamingEnvironments/list";
     }
 
