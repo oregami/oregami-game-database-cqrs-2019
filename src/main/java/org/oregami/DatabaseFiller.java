@@ -63,7 +63,7 @@ public class DatabaseFiller implements CommandLineRunner {
         hardwareModelApplicationService.createNewHardwareModel(snesHWM3Id, "Japanese SHVC-101 model", HardwareModelType.HARDWARE_MODEL);
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM3Id);
 
-        hardwareModelApplicationService.createNewHardwareModel(snesHWM4Id, "SNES mini", HardwareModelType.EMULATOR_VERSION);
+        hardwareModelApplicationService.createNewHardwareModel(snesHWM4Id, "SNES mini", HardwareModelType.NEW_HARDWARE_WITH_EMULATOR);
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM4Id);
         /*
         Japanese SHVC-001 model
@@ -95,7 +95,7 @@ public class DatabaseFiller implements CommandLineRunner {
         hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64_II_Id, "C64-II", HardwareModelType.HARDWARE_MODEL);
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64_II_Id);
 
-        hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64_Mini_Id, "The C64 Mini", HardwareModelType.EMULATOR_VERSION);
+        hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64_Mini_Id, "The C64 Mini", HardwareModelType.NEW_HARDWARE_WITH_EMULATOR);
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64_Mini_Id);
 
 

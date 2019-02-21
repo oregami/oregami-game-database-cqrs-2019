@@ -108,7 +108,7 @@ public class OregamiApplicationTests {
         hardwareModelApplicationService.createNewHardwareModel("idHmC64original", "original C64", HardwareModelType.HARDWARE_MODEL);
         hardwareModelApplicationService.createNewHardwareModel("idHmC64-I", "C64-I", HardwareModelType.HARDWARE_MODEL);
         hardwareModelApplicationService.createNewHardwareModel("idHmC64-II", "C64-II", HardwareModelType.HARDWARE_MODEL);
-        hardwareModelApplicationService.createNewHardwareModel("idHmC64-Mini", "The C64 Mini", HardwareModelType.EMULATOR_VERSION);
+        hardwareModelApplicationService.createNewHardwareModel("idHmC64-Mini", "The C64 Mini", HardwareModelType.NEW_HARDWARE_WITH_EMULATOR);
 
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform("idc64HWP", "idHmC64original");
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform("idc64HWP", "idHmC64-I");

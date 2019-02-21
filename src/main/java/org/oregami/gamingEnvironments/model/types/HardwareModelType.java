@@ -5,5 +5,5 @@ public enum HardwareModelType  {
     HARDWARE_MODEL,
     INOFFICIAL_CLONE,
     ARCADE_BOARD,
-    EMULATOR_VERSION
+    NEW_HARDWARE_WITH_EMULATOR
 }
