@@ -80,7 +80,7 @@ public class GamingEnvironmentResource {
                 }
                 gamingEnvironmentMap.get(type).add(g);
             }
-            g.getHardwarePlatform().getHardwarePlatformType();
+
         }
         model.addAttribute("gamingEnvironmentMap", gamingEnvironmentMap);
         return "gamingEnvironments/list";
