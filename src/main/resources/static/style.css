@@ -69,7 +69,7 @@ nav.navigation {
     /* http://www.colorpicker.com/0055c4 */
     color: white;
     padding: 0px;
-    font-size: 80%;
+    font-size: 0.8em;
     /*border-bottom: 2px solid #dddddd;*/
     line-height: 200%;
     margin-bottom: 10px;
@@ -201,7 +201,7 @@ a {
 
     nav.navigation {
         padding-left: 20px;
-        font-size: 90%;
+        font-size: 0.9em;
     }
 
     ul.navigation li:first-child {
@@ -250,7 +250,7 @@ a {
         vertical-align: bottom;
     }
     nav.navigation {
-        font-size: 100%;
+        font-size: 1.1em;
     }
     .nav-login {
         top: 25px;
@@ -313,6 +313,9 @@ a {
         font-size: 1.7em;
     }
 
+    nav.navigation {
+        font-size: 1.5em;
+    }
     /*body {*/
         /*font-size: 16px;*/
     /*}*/
