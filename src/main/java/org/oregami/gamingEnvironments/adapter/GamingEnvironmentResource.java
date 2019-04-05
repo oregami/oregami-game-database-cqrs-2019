@@ -14,6 +14,8 @@ import org.oregami.gamingEnvironments.model.GamingEnvironmentRepository;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwareModel;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwarePlatform;
+import org.oregami.references.model.ReferenceRepository;
+import org.oregami.references.readmodel.RReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,6 +43,9 @@ public class GamingEnvironmentResource {
     private EventHelper eventHelper;
 
     private GamingEnvironmentRepository gamingEnvironmentRepository;
+
+    @Autowired
+    private ReferenceRepository referenceRepository;
 
     @Autowired
     public GamingEnvironmentResource(
@@ -94,6 +99,17 @@ public class GamingEnvironmentResource {
         Map<String, Map<String, Object>> eventMap = getEventsForGamingEnvironmentAsStrings(gamingEnvironment);
         model.addAttribute("events", eventMap);
 
+        Map<String, RReference> referenceMap = new LinkedHashMap<>();
+        for (Map.Entry<String, Map<String, Object>> entry: eventMap.entrySet()) {
+            List<RReference> l = referenceRepository.findByEventIdList(entry.getValue().get("Identifier").toString());
+            for (RReference r: l) {
+                if (referenceMap.get(r.getId())==null) {
+                    referenceMap.put(r.getId(), r);
+                }
+            }
+        }
+        model.addAttribute("referenceMap", referenceMap);
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.PUBLIC_ONLY);
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -104,6 +120,8 @@ public class GamingEnvironmentResource {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+
+
 
 
 

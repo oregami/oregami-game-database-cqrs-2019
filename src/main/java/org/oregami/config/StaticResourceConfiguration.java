@@ -2,7 +2,6 @@ package org.oregami.config;
 
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -66,9 +65,10 @@ public class StaticResourceConfiguration implements WebMvcConfigurer, HandlerInt
                         modelAndView.addObject("URL_" + url.name(), url.value);
                     }
                 }
-                KeycloakAuthenticationToken userPrincipal = (KeycloakAuthenticationToken) request.getUserPrincipal();
-                if (modelAndView!=null && userPrincipal !=null && userPrincipal instanceof KeycloakAuthenticationToken) {
 
+                Object userPrincipalObject = request.getUserPrincipal();
+                if (modelAndView!=null && userPrincipalObject !=null && userPrincipalObject instanceof KeycloakAuthenticationToken) {
+                    KeycloakAuthenticationToken userPrincipal = (KeycloakAuthenticationToken) userPrincipalObject;
                     modelAndView.addObject("loggedIn", true);
                     modelAndView.addObject("userId", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
                     if (userPrincipal!=null) {

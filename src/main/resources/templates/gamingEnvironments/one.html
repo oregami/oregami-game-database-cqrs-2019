@@ -69,7 +69,17 @@
 
     </div>
 
+
+    <div class="ui grey inverted top attached header" th:text="#{common.references}"/>
+    <!-- ################  references   ################################## -->
+    <div th:each="entry : ${referenceMap}" class="ui attached segment">
+        <span th:text="${entry.value.referenceType}"></span>
+        <a th:if="${entry.value.url}" th:href="${entry.value.url}" target="_blank" th:text="${entry.value.url}"></a>
+    </div>
+
 </div>
+
+
 
 
 <div class="ui segment">
@@ -77,24 +87,30 @@
 
     <table class="ui celled table" border="1">
         <thead>
-            <th>Timestamp</th>
+            <th>Timestamp / EventType</th>
             <th>User</th>
+            <th>EventId</th>
             <th>Change</th>
         </thead>
         <tbody>
         <tr th:each="event : ${events}">
-            <td>
+            <td style="vertical-align: top;">
                <span th:text="${event.key}"></span>
+                <br/>
+                <span
+                        class="ui teal label"
+                        th:text="${event.getValue().get('PayloadTypeSimple')}"
+                ></span>
             </td>
-            <td>
-                <!--
-                <span th:text="${event.value.get('MetaData').get('userId')}"></span>
-                -->
+            <td style="vertical-align: top;">
                 <span th:text="${event.value.get('username')}"></span>
             </td>
+            <td style="vertical-align: top;">
+                <span th:text="${event.value.get('Identifier')}"></span>
+            </td>
             <td>
-                <strong><span class="ui teal label" th:text="${event.getValue().get('PayloadTypeSimple')}"></span></strong>
-                <span class="ui" th:text="${event.value.get('PayloadToString')}"/>
+                <pre style="margin:0px;"><span class="ui" th:text="${event.value.get('PayloadToString').trim()}"
+                /></pre>
                 <!-- <div class="ui attached segment" th:text="${event.value}"/> -->
             </td>
         </tr>

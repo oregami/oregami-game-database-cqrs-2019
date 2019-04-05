@@ -1,10 +1,13 @@
 package org.oregami;
 
+import org.oregami.common.EventHelper;
 import org.oregami.gamingEnvironments.application.GamingEnvironmentApplicationService;
 import org.oregami.gamingEnvironments.application.HardwareModelApplicationService;
 import org.oregami.gamingEnvironments.application.HardwarePlatformApplicationService;
 import org.oregami.gamingEnvironments.model.types.HardwareModelType;
 import org.oregami.gamingEnvironments.model.types.HardwarePlatformType;
+import org.oregami.references.application.ReferenceApplicationService;
+import org.oregami.references.model.types.ReferenceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.core.Authentication;
@@ -15,7 +18,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.Year;
 import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 public class DatabaseFiller implements CommandLineRunner {
@@ -32,6 +37,13 @@ public class DatabaseFiller implements CommandLineRunner {
     @Autowired
     private HardwareModelApplicationService hardwareModelApplicationService;
 
+    @Autowired
+    private EventHelper eventHelper;
+
+    @Autowired
+    private ReferenceApplicationService referenceApplicationService;
+
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -44,6 +56,16 @@ public class DatabaseFiller implements CommandLineRunner {
         String snes = UUID.randomUUID().toString();
         gamingEnvironmentApplicationService.createNewGamingEnvironment(snes, "Super Nintendo");
         gamingEnvironmentApplicationService.addYearOfFirstRelease(snes, Year.of(1990));
+
+        String refId1 = UUID.randomUUID().toString();
+        CompletableFuture<Object> newReferenceResult = referenceApplicationService.createNewReference(refId1, ReferenceType.FAN_SITE);
+        referenceApplicationService.addUrl(refId1, "https://nintendo.fandom.com/wiki/Super_Famicom");
+
+        Map<String, Map<String, Object>> eventInformationSnes = eventHelper.getEventInformation(snes);
+        for (String key: eventInformationSnes.keySet()) {
+            referenceApplicationService.addEventId(refId1, eventInformationSnes.get(key).get("Identifier").toString());
+        }
+
 
         String snesHwpId = UUID.randomUUID().toString();
         hardwarePlatformApplicationService.createNewHardwarePlatform(snesHwpId, "SNES console", HardwarePlatformType.CONSOLES_EUROPE_NORTHAMERICA);

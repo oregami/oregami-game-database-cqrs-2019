@@ -2,6 +2,7 @@ package org.oregami;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,6 +20,11 @@ import org.oregami.gamingEnvironments.model.types.HardwareModelType;
 import org.oregami.gamingEnvironments.model.types.HardwarePlatformType;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwarePlatform;
+import org.oregami.references.application.ReferenceApplicationService;
+import org.oregami.references.model.Reference;
+import org.oregami.references.model.ReferenceRepository;
+import org.oregami.references.model.types.ReferenceType;
+import org.oregami.references.readmodel.RReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -53,6 +59,12 @@ public class OregamiApplicationTests {
     @Autowired
     HardwareModelRepository hardwareModelRepository;
 
+    @Autowired
+    ReferenceApplicationService referenceApplicationService;
+
+    @Autowired
+    ReferenceRepository referenceRepository;
+
 
     @Test
     public void validationTest() {
@@ -82,8 +94,37 @@ public class OregamiApplicationTests {
 
     }
 
+    @Test
+    public void referenceTest() {
+        String id = "id4242";
+        referenceApplicationService.createNewReference(id, ReferenceType.OFFICIAL_SITE);
+        referenceApplicationService.addUrl(id, "http://www.kultpower.de");
+        referenceApplicationService.addEventId(id, "test_event_id1");
+        referenceApplicationService.addEventId(id, "test_event_id2");
+
+        referenceApplicationService.addDescription(id,"desc text");
+
+        RReference refLoaded = referenceRepository.findById(id).get();
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(refLoaded));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        List<RReference> resultSizeOne = referenceRepository.findByEventIdList("test_event_id1");
+        Assert.assertThat(resultSizeOne.size(), Matchers.is(1));
+        Assert.assertThat(resultSizeOne.get(0).getDescription(), Matchers.is("desc text"));
+
+        List<RReference> resultEmtpy = referenceRepository.findByEventIdList("non_existent_event_id");
+        Assert.assertThat(resultEmtpy.size(), Matchers.is(0));
+
+
+    }
+
 	@Test
-    @Ignore
 	public void gamingEnvironmentApplicationServiceTest() {
 
 	    gamingEnvironmentApplicationService.createNewGamingEnvironment("idc64GE", "Commodore 64");
