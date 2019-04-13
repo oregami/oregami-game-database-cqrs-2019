@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.oregami.common.CommonError;
@@ -21,7 +20,6 @@ import org.oregami.gamingEnvironments.model.types.HardwarePlatformType;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwarePlatform;
 import org.oregami.references.application.ReferenceApplicationService;
-import org.oregami.references.model.Reference;
 import org.oregami.references.model.ReferenceRepository;
 import org.oregami.references.model.types.ReferenceType;
 import org.oregami.references.readmodel.RReference;
@@ -30,9 +28,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -95,11 +91,28 @@ public class OregamiApplicationTests {
     }
 
     @Test
+    public void ref1() {
+        HashSet<String> eventIDs = new HashSet<>();
+        eventIDs.add("eventId1");
+        referenceApplicationService.createNewReference("id1", ReferenceType.FAN_SITE, eventIDs, null, null);
+    }
+
+    @Test
+    public void ref2() {
+        HashSet<String> eventIDs = new HashSet<>();
+        referenceApplicationService.createNewReference("id1", ReferenceType.FAN_SITE, eventIDs, null, null);
+        eventIDs.add("eventId1");
+        referenceApplicationService.addEventId("id1", "eventId2");
+    }
+
+    @Test
     public void referenceTest() {
         String id = "id4242";
-        referenceApplicationService.createNewReference(id, ReferenceType.OFFICIAL_SITE);
+        Set<String> eventIdSet = new HashSet<>();
+        eventIdSet.add("test_event_id1");
+
+        referenceApplicationService.createNewReference(id, ReferenceType.OFFICIAL_SITE, eventIdSet, null, null);
         referenceApplicationService.addUrl(id, "http://www.kultpower.de");
-        referenceApplicationService.addEventId(id, "test_event_id1");
         referenceApplicationService.addEventId(id, "test_event_id2");
 
         referenceApplicationService.addDescription(id,"desc text");

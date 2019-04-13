@@ -27,6 +27,13 @@ public class ReferenceUpdater {
     @EventHandler
     public void on(ReferenceCreatedEvent event) {
         RReference r = new RReference(event.getNewId(), event.getReferenceType().name());
+        if (event.getEventIdSet()!=null && !event.getEventIdSet().isEmpty()) {
+            for (String id: event.getEventIdSet()) {
+                r.addEventId(id);
+            }
+        }
+        r.setUrl(event.getUrl());
+        r.setDescription(event.getDescription());
         r.setChangeTime(LocalDateTime.now());
         repository.save(r);
     }
@@ -42,7 +49,8 @@ public class ReferenceUpdater {
     @EventHandler
     public void on(EventIdAddedEvent event) {
         RReference r = repository.getOne(event.getId());
-        r.getEventIdList().add(event.getEventId());
+        //r.getEventIdList().add(event.getEventId());
+        r.addEventId(event.getEventId());
         r.setChangeTime(LocalDateTime.now());
         repository.save(r);
     }

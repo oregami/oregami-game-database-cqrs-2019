@@ -15,7 +15,7 @@
     <h4 class="ui attached header" th:text="#{gamingEnvironment.basicdata}"></h4>
     <div class="ui attached segment">
         <div><label>workingTitle:</label> <span th:text="${gamingEnvironment.workingTitle}"/></div>
-        <div><label>yearOfFirstRelease:</label><span th:text="${gamingEnvironment.yearOfFirstRelease}"/></div>
+        <div><label>yearOfFirstRelease:</label><span th:text="${gamingEnvironment.yearOfFirstRelease}" data-events="yearOfFirstRelease"/></div>
         <div><label>changeTime</label> <span th:text="${gamingEnvironment.changeTime}"/></div>
     </div>
 
@@ -67,14 +67,32 @@
             <button class="ui primary basic button" th:text="#{gamingEnvironment.addNewHardwareModel}"/>
         </a>
 
+        <a th:href="@{/references/edit/addNewReference(aggregateRootId=${gamingEnvironment.id})}">
+            <button class="ui primary basic button" th:text="#{references.addNewReference}"/>
+        </a>
+
     </div>
 
 
     <div class="ui grey inverted top attached header" th:text="#{common.references}"/>
     <!-- ################  references   ################################## -->
-    <div th:each="entry : ${referenceMap}" class="ui attached segment">
-        <span th:text="${entry.value.referenceType}"></span>
-        <a th:if="${entry.value.url}" th:href="${entry.value.url}" target="_blank" th:text="${entry.value.url}"></a>
+    <div th:each="entry,status : ${referenceMap}" class="ui attached segment">
+        <span th:text="${status.count}"></span>) <span th:text="${entry.value.referenceType}"></span>
+
+        <th:block th:if="${!#strings.isEmpty(entry.value.url)}">
+            <a th:href="${entry.value.url}" target="_blank" th:title="${entry.value.url}">
+                <span th:text="${entry.value.url}"></span>
+                <i class="linkify icon"> </i>
+            </a>
+        </th:block>
+
+        <th:block th:if="${!#strings.isEmpty(entry.value.description)}">
+            <div class="ui raised segment">
+                <span th:text="${entry.value.description}"></span>
+            </div>
+        </th:block>
+
+
     </div>
 
 </div>

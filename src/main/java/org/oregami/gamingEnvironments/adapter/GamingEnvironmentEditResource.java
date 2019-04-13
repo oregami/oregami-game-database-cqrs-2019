@@ -9,6 +9,8 @@ import org.oregami.gamingEnvironments.model.GamingEnvironmentRepository;
 import org.oregami.gamingEnvironments.model.types.HardwareModelType;
 import org.oregami.gamingEnvironments.model.types.HardwarePlatformType;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
+import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwareModel;
+import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwarePlatform;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -180,6 +180,19 @@ public class GamingEnvironmentEditResource {
         return "gamingEnvironments/edit/createHardwareModel";
     }
 
+    @GetMapping(value = "/{gamingEnvironmentId}/addNewReference")
+    public String addNewReference(@PathVariable String gamingEnvironmentId, Model model) {
+
+        RGamingEnvironment gamingEnvironment = gamingEnvironmentRepository.findById(gamingEnvironmentId).get();
+        model.addAttribute("gamingEnvironment", gamingEnvironment);
+
+        //######### read events ##############
+        Map<String, Map<String, Object>> eventMap = getEventsForGamingEnvironmentAsStrings(gamingEnvironment);
+        model.addAttribute("events", eventMap);
+
+        return "gamingEnvironments/edit/addNewReference";
+    }
+
 
     @PostMapping(value = "/{gamingEnvironmentId}/addHardwareModel")
     public String addHardwareModelExecute(
@@ -240,6 +253,23 @@ public class GamingEnvironmentEditResource {
             list.add(h.name());
         }
         return list;
+    }
+
+
+    private Map<String,Map<String, Object>> getEventsForGamingEnvironmentAsStrings(RGamingEnvironment gamingEnvironment) {
+        Map<String, Map<String, Object>> result = new TreeMap<>();
+        result.putAll(eventHelper.getEventInformation(gamingEnvironment.getId()));
+
+        RHardwarePlatform hwp = gamingEnvironment.getHardwarePlatform();
+        if (hwp!=null) {
+            result.putAll(eventHelper.getEventInformation(hwp.getId()));
+            for (RHardwareModel hwm : hwp.getHardwareModelSet()) {
+                result.putAll(eventHelper.getEventInformation(hwm.getId()));
+            }
+        }
+
+        //filterEvents(gamingEnvironment.getId(), "yearOfFirstRelease");
+        return result;
     }
 
 

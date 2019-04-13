@@ -17,9 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.time.Year;
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 @Component
@@ -55,16 +53,24 @@ public class DatabaseFiller implements CommandLineRunner {
         //#########  SNES   #######################
         String snes = UUID.randomUUID().toString();
         gamingEnvironmentApplicationService.createNewGamingEnvironment(snes, "Super Nintendo");
-        gamingEnvironmentApplicationService.addYearOfFirstRelease(snes, Year.of(1990));
+
 
         String refId1 = UUID.randomUUID().toString();
-        CompletableFuture<Object> newReferenceResult = referenceApplicationService.createNewReference(refId1, ReferenceType.FAN_SITE);
+        //String refId2 = UUID.randomUUID().toString();
+
+        Set<String> eventIdSet = new HashSet<>();
+        CompletableFuture<Object> newReferenceResult = referenceApplicationService.createNewReference(refId1, ReferenceType.FAN_SITE, eventIdSet, null, null);
+        //CompletableFuture<Object> newReferenceResult2 = referenceApplicationService.createNewReference(refId2, ReferenceType.MIND_PROTOCOL, eventIdSet);
         referenceApplicationService.addUrl(refId1, "https://nintendo.fandom.com/wiki/Super_Famicom");
+        //referenceApplicationService.addUrl(refId2, "https://www.google.de");
 
         Map<String, Map<String, Object>> eventInformationSnes = eventHelper.getEventInformation(snes);
         for (String key: eventInformationSnes.keySet()) {
             referenceApplicationService.addEventId(refId1, eventInformationSnes.get(key).get("Identifier").toString());
+            //referenceApplicationService.addEventId(refId2, eventInformationSnes.get(key).get("Identifier").toString());
         }
+
+        gamingEnvironmentApplicationService.addYearOfFirstRelease(snes, Year.of(1990));
 
 
         String snesHwpId = UUID.randomUUID().toString();

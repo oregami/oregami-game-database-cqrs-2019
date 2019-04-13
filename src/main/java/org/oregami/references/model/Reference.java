@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateLifecycle;
-import org.axonframework.commandhandling.model.AggregateMember;
-import org.axonframework.commandhandling.model.ForwardNone;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.oregami.references.command.AddDescriptionCommand;
@@ -41,12 +39,13 @@ public class Reference {
 
     @CommandHandler
     public Reference(CreateReferenceCommand command) {
-        AggregateLifecycle.apply(new ReferenceCreatedEvent(command.getNewId(), command.getReferenceType()));
+        AggregateLifecycle.apply(new ReferenceCreatedEvent(command.getNewId(), command.getReferenceType(), command.getEventIdSet(), command.getUrl(), command.getDescription()));
     }
 
     @EventSourcingHandler
     public void in(ReferenceCreatedEvent event) {
         this.id = event.getNewId();
+        this.referenceType = event.getReferenceType();
     }
 
 

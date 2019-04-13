@@ -9,6 +9,7 @@ import org.oregami.references.model.types.ReferenceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -21,8 +22,8 @@ public class ReferenceApplicationService {
         this.commandGateway = commandGateway;
     }
 
-    public CompletableFuture<Object> createNewReference(String newId, ReferenceType referenceType) {
-        return commandGateway.send(new CreateReferenceCommand(newId, referenceType));
+    public CompletableFuture<Object> createNewReference(String newId, ReferenceType referenceType, Set<String> eventIdSet, String url, String description) {
+        return commandGateway.send(new CreateReferenceCommand(newId, referenceType, eventIdSet, url, description));
     }
 
 

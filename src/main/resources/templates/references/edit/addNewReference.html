@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+
+<head th:include="header :: header" th:with="title='Reference - create'"></head>
+
+
+<body>
+
+<!--<nav th:replace="navigation :: navigation(URL_GAMINGENVIRONMENTS)"></nav>-->
+
+<div th:replace="loginfirst :: copy"></div>
+
+<div class="ui segment" sec:authorize="isAuthenticated()">
+
+    <th:block th:if="${step == 1}">
+    <div class="ui grey inverted top attached header" th:text="#{references.please_select_input}"/>
+    <form action="?" method="POST">
+    <input type="hidden" name="aggregateRootId" th:value="${aggregateRootId}"/>
+    <!--<input type="hidden" name="step" value="2"/>-->
+    <table class="ui celled table" border="1">
+        <thead>
+        <th>select</th>
+        <th>Timestamp / EventType</th>
+        <th>User</th>
+        <th>Change</th>
+        </thead>
+        <tbody>
+        <tr th:each="event : ${events}">
+            <td>
+                <!-- <input type="checkbox" name="selectedEventIds" th:value="${event.value.get('Identifier')}" th:checked="${@eventHelper.check(selectedEventIds, event.value.get('Identifier'))}"/>-->
+                <input type="checkbox" name="selectedEventIds" th:value="${event.value.get('Identifier')}" th:checked="${selectedEventIds!=null && selectedEventIds.contains(event.value.get('Identifier'))}"/>
+
+            </td>
+            <td style="vertical-align: top;">
+                <span th:text="${event.key}"></span>
+                <br/>
+                <span
+                        class="ui teal label"
+                        th:text="${event.getValue().get('PayloadTypeSimple')}"
+                ></span>
+            </td>
+            <td style="vertical-align: top;">
+                <span th:text="${event.value.get('username')}"></span>
+            </td>
+            <td>
+                <pre style="margin:0px;"><span class="ui" th:text="${event.value.get('PayloadToString').trim()}"
+                /></pre>
+                <!-- <div class="ui attached segment" th:text="${event.value}"/> -->
+            </td>
+        </tr>
+        </tbody>
+    </table>
+        <input type="submit" th:value="#{commons.continue}"/>
+    </form>
+    </th:block>
+
+
+    <th:block th:if="${step == 2}">
+
+        <form action="saveNewReference" method="POST" class="ui form">
+        <input type="hidden" name="aggregateRootId" th:value="${aggregateRootId}"/>
+        <input type="hidden" name="selectedEventIds" size="200" th:value="${selectedEventIds}"/>
+
+        <table class="ui celled table" border="1">
+            <thead>
+            <th>Timestamp / Event</th>
+            <th>Change</th>
+            </thead>
+            <tbody>
+            <tr th:each="event : ${selectedEvents}">
+                <td style="vertical-align: top;">
+                    <span th:text="${event.key}"></span>
+                    <br/>
+                    <span
+                            class="ui teal label"
+                            th:text="${event.getValue().get('PayloadTypeSimple')}"
+                    ></span>
+                </td>
+                <td>
+                <pre style="margin:0px;"><span class="ui" th:text="${event.value.get('PayloadToString').trim()}"
+                /></pre>
+                    <!-- <div class="ui attached segment" th:text="${event.value}"/> -->
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="field">
+            <label>Type</label>
+            <select name="referenceType" class="ui dropdown">
+                <option value="">-</option>
+                <option th:each="hpt: ${availableReferenceTypes}" th:value="${hpt}" th:text="#{'' + ${hpt}}"></option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>URL</label>
+            <input type="text" name="url" placeholder="http://">
+        </div>
+        <div class="field">
+            <label>Description</label>
+            <input type="text" name="description" placeholder="">
+        </div>
+
+        <br/>
+        <button class="ui button" type="submit" th:text="#{commons.save}"></button>
+    </form>
+
+    </th:block>
+
+
+</div>
+
+<div class="ui segments" th:if="${result}">
+    <div class="ui segment">
+        <p class="ui red label">Errors</p>
+    </div>
+    <div class="ui segments">
+        <div class="ui segment" th:each="error: ${result.errors}">
+            <span th:text="#{${error.messageName}}"></span>
+            <br/>
+            <span style="font-size: 80%;" th:text="${' (' + error.context.field + ')'}"></span>
+        </div>
+    </div>
+</div>
+
+<div th:replace="footer :: copy"></div>
+
+
+</body>
+</html>

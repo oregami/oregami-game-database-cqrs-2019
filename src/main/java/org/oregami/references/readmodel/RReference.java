@@ -41,9 +41,6 @@ public class RReference extends BaseEntityUUID {
         this.url = url;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public void setChangeTime(LocalDateTime changeTime) {
         this.changeTime = changeTime;
@@ -53,5 +50,11 @@ public class RReference extends BaseEntityUUID {
         return changeTime;
     }
 
+    public void addEventId(String eventId) {
+        eventIdList.add(eventId);
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

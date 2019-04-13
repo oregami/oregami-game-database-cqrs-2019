@@ -20,6 +20,20 @@ public class EventHelper {
     @Autowired
     private EventStore eventStore;
 
+    public Map<String, Object> getEventsWithIds(String aggregateId, List<String> eventIds) {
+        Map<String, Map<String, Object>> allEvents = getEventInformation(aggregateId);
+
+        Map<String, Object> result = new TreeMap<>();
+
+        for (Map<String, Object> value: allEvents.values()) {
+            if (eventIds.contains(value.get("Identifier"))) {
+                result.put(value.get("Timestamp").toString(), value);
+            }
+        }
+
+        return result;
+    }
+
     public Map<String, Map<String, Object>> getEventInformation(String aggregateId) {
         Map<String, Map<String, Object>> result = new TreeMap<>();
 
@@ -65,5 +79,12 @@ public class EventHelper {
 
         return result;
 
+    }
+
+    public boolean check(Map<String, Map<String, Object>> events, String eventId) {
+        for(Map<String, Object> e: events.values()) {
+            if (e.get("Identifier").equals(eventId)) return true;
+        }
+        return false;
     }
 }

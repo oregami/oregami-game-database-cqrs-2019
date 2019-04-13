@@ -10,6 +10,8 @@ import org.oregami.common.EventHelper;
 import org.oregami.gamingEnvironments.application.GamingEnvironmentApplicationService;
 import org.oregami.gamingEnvironments.application.HardwareModelApplicationService;
 import org.oregami.gamingEnvironments.application.HardwarePlatformApplicationService;
+import org.oregami.gamingEnvironments.event.YearOfFirstReleaseAddedEvent;
+import org.oregami.gamingEnvironments.event.YearOfFirstReleaseChangedEvent;
 import org.oregami.gamingEnvironments.model.GamingEnvironmentRepository;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwareModel;
@@ -96,20 +98,11 @@ public class GamingEnvironmentResource {
         RGamingEnvironment gamingEnvironment = gamingEnvironmentRepository.findById(gamingEnvironmentId).get();
         model.addAttribute("gamingEnvironment", gamingEnvironment);
 
+        //######### read events ##############
         Map<String, Map<String, Object>> eventMap = getEventsForGamingEnvironmentAsStrings(gamingEnvironment);
         model.addAttribute("events", eventMap);
 
-        Map<String, RReference> referenceMap = new LinkedHashMap<>();
-        for (Map.Entry<String, Map<String, Object>> entry: eventMap.entrySet()) {
-            List<RReference> l = referenceRepository.findByEventIdList(entry.getValue().get("Identifier").toString());
-            for (RReference r: l) {
-                if (referenceMap.get(r.getId())==null) {
-                    referenceMap.put(r.getId(), r);
-                }
-            }
-        }
-        model.addAttribute("referenceMap", referenceMap);
-
+        //######### format events as string ##############
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.PUBLIC_ONLY);
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
@@ -121,8 +114,24 @@ public class GamingEnvironmentResource {
             throw new RuntimeException(e);
         }
 
+        List<RReference> all = referenceRepository.findAll();
+        try {
+            System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(all));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
-
+        //######  references ###################################
+        Map<String, RReference> referenceMap = new LinkedHashMap<>();
+        for (Map.Entry<String, Map<String, Object>> entry: eventMap.entrySet()) {
+            List<RReference> l = referenceRepository.findByEventIdList(entry.getValue().get("Identifier").toString());
+            for (RReference r: l) {
+                if (referenceMap.get(r.getId())==null) {
+                    referenceMap.put(r.getId(), r);
+                }
+            }
+        }
+        model.addAttribute("referenceMap", referenceMap);
 
 
         return "gamingEnvironments/one";
@@ -137,6 +146,36 @@ public class GamingEnvironmentResource {
             result.putAll(eventHelper.getEventInformation(hwp.getId()));
             for (RHardwareModel hwm : hwp.getHardwareModelSet()) {
                 result.putAll(eventHelper.getEventInformation(hwm.getId()));
+            }
+        }
+
+        //filterEvents(gamingEnvironment.getId(), "yearOfFirstRelease");
+        return result;
+    }
+
+
+    private Map<String,Map<String, Object>> filterEvents(String gamingEnvironmentId, String eventQuery) {
+
+        Map<String,Map<String, Object>> allEvents = eventHelper.getEventInformation(gamingEnvironmentId);
+
+        List<String> commandClassList = new ArrayList<>();
+
+        switch (eventQuery) {
+            case "yearOfFirstRelease":
+                commandClassList.add(YearOfFirstReleaseAddedEvent.class.getName());
+                commandClassList.add(YearOfFirstReleaseChangedEvent.class.getName());
+                break;
+            default:
+
+        }
+
+        Map<String, Map<String, Object>> result = new TreeMap<>();
+
+        if (commandClassList.size()>0) {
+            for (String key: allEvents.keySet()) {
+                if (commandClassList.contains(allEvents.get(key).get("PayloadType").toString())) {
+                    result.put(key, allEvents.get(key));
+                }
             }
         }
         return result;
