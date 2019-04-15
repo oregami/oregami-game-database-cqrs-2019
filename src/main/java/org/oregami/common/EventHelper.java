@@ -34,6 +34,29 @@ public class EventHelper {
         return result;
     }
 
+    public Map<String, Object> getEventsWithIds(List<String> aggregateIds, List<String> eventIds) {
+        Map<String, Map<String, Object>> allEvents = getEventInformation(aggregateIds);
+
+        Map<String, Object> result = new TreeMap<>();
+
+        for (Map<String, Object> value: allEvents.values()) {
+            if (eventIds.contains(value.get("Identifier"))) {
+                result.put(value.get("Timestamp").toString(), value);
+            }
+        }
+
+        return result;
+    }
+
+    public Map<String, Map<String, Object>> getEventInformation(List<String> aggregateIdList) {
+        Map<String, Map<String, Object>> result = new TreeMap<>();
+        for (String id: aggregateIdList) {
+            Map<String, Map<String, Object>> map = getEventInformation(id);
+            result.putAll(map);
+        }
+        return result;
+    }
+
     public Map<String, Map<String, Object>> getEventInformation(String aggregateId) {
         Map<String, Map<String, Object>> result = new TreeMap<>();
 

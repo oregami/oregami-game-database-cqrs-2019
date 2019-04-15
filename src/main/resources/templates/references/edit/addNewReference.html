@@ -20,11 +20,12 @@
     <div class="ui grey inverted top attached header" th:text="#{references.please_select_input}"/>
     <form action="?" method="POST">
     <input type="hidden" name="aggregateRootId" th:value="${aggregateRootId}"/>
-    <!--<input type="hidden" name="step" value="2"/>-->
+        <input type="hidden" name="aggregateRootIds" th:value="${aggregateRootIds}"/>
+        <!--<input type="hidden" name="step" value="2"/>-->
     <table class="ui celled table" border="1">
         <thead>
         <th>select</th>
-        <th>Timestamp / EventType</th>
+        <th>Timestamp / EventType / ID</th>
         <th>User</th>
         <th>Change</th>
         </thead>
@@ -42,6 +43,8 @@
                         class="ui teal label"
                         th:text="${event.getValue().get('PayloadTypeSimple')}"
                 ></span>
+                <br/>
+                <span th:text="${event.value.get('Identifier')}"></span>
             </td>
             <td style="vertical-align: top;">
                 <span th:text="${event.value.get('username')}"></span>

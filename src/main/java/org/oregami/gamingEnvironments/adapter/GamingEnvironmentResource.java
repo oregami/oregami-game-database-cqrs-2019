@@ -98,6 +98,8 @@ public class GamingEnvironmentResource {
         RGamingEnvironment gamingEnvironment = gamingEnvironmentRepository.findById(gamingEnvironmentId).get();
         model.addAttribute("gamingEnvironment", gamingEnvironment);
 
+        model.addAttribute("aggregateRootIds", getAggregateRootIds(gamingEnvironment));
+
         //######### read events ##############
         Map<String, Map<String, Object>> eventMap = getEventsForGamingEnvironmentAsStrings(gamingEnvironment);
         model.addAttribute("events", eventMap);
@@ -137,20 +139,22 @@ public class GamingEnvironmentResource {
         return "gamingEnvironments/one";
     }
 
-    private Map<String,Map<String, Object>> getEventsForGamingEnvironmentAsStrings(RGamingEnvironment gamingEnvironment) {
-        Map<String, Map<String, Object>> result = new TreeMap<>();
-        result.putAll(eventHelper.getEventInformation(gamingEnvironment.getId()));
+    private List<String> getAggregateRootIds(RGamingEnvironment gamingEnvironment) {
+        List<String> aggregateIdList = new ArrayList<>();
+        aggregateIdList.add(gamingEnvironment.getId());
 
         RHardwarePlatform hwp = gamingEnvironment.getHardwarePlatform();
         if (hwp!=null) {
-            result.putAll(eventHelper.getEventInformation(hwp.getId()));
+            aggregateIdList.add(hwp.getId());
             for (RHardwareModel hwm : hwp.getHardwareModelSet()) {
-                result.putAll(eventHelper.getEventInformation(hwm.getId()));
+                aggregateIdList.add(hwm.getId());
             }
         }
+        return aggregateIdList;
+    }
 
-        //filterEvents(gamingEnvironment.getId(), "yearOfFirstRelease");
-        return result;
+    private Map<String,Map<String, Object>> getEventsForGamingEnvironmentAsStrings(RGamingEnvironment gamingEnvironment) {
+        return eventHelper.getEventInformation(getAggregateRootIds(gamingEnvironment));
     }
 
 

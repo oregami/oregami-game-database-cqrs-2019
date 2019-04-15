@@ -67,7 +67,7 @@
             <button class="ui primary basic button" th:text="#{gamingEnvironment.addNewHardwareModel}"/>
         </a>
 
-        <a th:href="@{/references/edit/addNewReference(aggregateRootId=${gamingEnvironment.id})}">
+        <a th:href="@{/references/edit/addNewReference(aggregateRootId=${gamingEnvironment.id},aggregateRootIds=${aggregateRootIds})}">
             <button class="ui primary basic button" th:text="#{references.addNewReference}"/>
         </a>
 

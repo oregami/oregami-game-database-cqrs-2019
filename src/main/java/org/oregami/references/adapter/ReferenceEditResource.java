@@ -37,12 +37,15 @@ public class ReferenceEditResource {
     @GetMapping(value = "/addNewReference")
     public String addNewReference(
             @RequestParam String aggregateRootId,
+            @RequestParam List<String> aggregateRootIds,
             //@RequestParam(required = false) List<String> selectedEventIds,
             Model model) {
 
         model.addAttribute("aggregateRootId", aggregateRootId);
+        model.addAttribute("aggregateRootIds", String.join(",", aggregateRootIds));
+
         model.addAttribute("step", 1);
-        model.addAttribute("events", eventHelper.getEventInformation(aggregateRootId));
+        model.addAttribute("events", eventHelper.getEventInformation(aggregateRootIds));
 
         return "references/edit/addNewReference";
     }
@@ -51,16 +54,14 @@ public class ReferenceEditResource {
     @PostMapping(value = "/addNewReference")
     public String addNewReferenceStep2(
             @RequestParam String aggregateRootId,
+            @RequestParam List<String> aggregateRootIds,
             @RequestParam(required = false) String selectedEventIds,
             Model model) {
 
-//        if (selectedEventIds==null || selectedEventIds.length==0) {
-//            model.addAttribute("error", "no events selected");
-//        } else {
-            model.addAttribute("step", 2);
-            model.addAttribute("selectedEvents", eventHelper.getEventsWithIds(aggregateRootId, Arrays.asList(selectedEventIds.split(","))));
-//        }
+        model.addAttribute("step", 2);
+        model.addAttribute("selectedEvents", eventHelper.getEventsWithIds(aggregateRootIds, Arrays.asList(selectedEventIds.split(","))));
         model.addAttribute("aggregateRootId", aggregateRootId);
+        model.addAttribute("aggregateRootIds", aggregateRootIds);
         model.addAttribute("selectedEventIds", selectedEventIds);
         model.addAttribute("availableReferenceTypes", getAvailableReferenceTypes());
 
