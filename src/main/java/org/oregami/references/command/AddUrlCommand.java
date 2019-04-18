@@ -1,11 +1,7 @@
 package org.oregami.references.command;
 
 import lombok.Data;
-import org.axonframework.commandhandling.TargetAggregateIdentifier;
-import org.oregami.common.CommandValidator;
-import org.oregami.gamingEnvironments.model.GamingEnvironmentValidator;
-
-import java.time.Year;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 @Data
 //@CommandValidator(GamingEnvironmentValidator.class)

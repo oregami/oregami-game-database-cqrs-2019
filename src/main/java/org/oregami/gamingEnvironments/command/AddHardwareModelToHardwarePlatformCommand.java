@@ -1,7 +1,6 @@
 package org.oregami.gamingEnvironments.command;
 
-import lombok.Data;
-import org.axonframework.commandhandling.TargetAggregateIdentifier;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 public class AddHardwareModelToHardwarePlatformCommand {
 

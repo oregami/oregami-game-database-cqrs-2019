@@ -5,7 +5,6 @@ import org.oregami.common.*;
 import org.oregami.gamingEnvironments.application.HardwarePlatformApplicationService;
 import org.oregami.gamingEnvironments.model.HardwarePlatformRepository;
 import org.oregami.gamingEnvironments.model.types.HardwarePlatformType;
-import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwarePlatform;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

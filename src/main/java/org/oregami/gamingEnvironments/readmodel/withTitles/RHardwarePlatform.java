@@ -6,7 +6,8 @@ import org.oregami.common.BaseEntityUUID;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by sebastian on 03.11.16.

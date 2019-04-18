@@ -2,9 +2,9 @@ package org.oregami.gamingEnvironments.readmodel.withTitles;
 
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
+import org.oregami.gamingEnvironments.event.GamingEnvironmentCreatedEvent;
 import org.oregami.gamingEnvironments.event.HardwarePlatformAddedToGamingEnvironmentEvent;
 import org.oregami.gamingEnvironments.event.YearOfFirstReleaseAddedEvent;
-import org.oregami.gamingEnvironments.event.GamingEnvironmentCreatedEvent;
 import org.oregami.gamingEnvironments.event.YearOfFirstReleaseChangedEvent;
 import org.oregami.gamingEnvironments.model.GamingEnvironmentRepository;
 import org.oregami.gamingEnvironments.model.HardwarePlatformRepository;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * Created by sebastian on 19.02.17.

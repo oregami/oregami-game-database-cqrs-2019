@@ -1,7 +1,5 @@
 package org.oregami.gamingEnvironments.event;
 
-import java.time.Year;
-
 /**
  * Created by sebastian on 24.02.17.
  */

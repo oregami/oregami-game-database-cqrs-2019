@@ -1,7 +1,7 @@
 package org.oregami.gamingEnvironments.command;
 
 import lombok.Data;
-import org.axonframework.commandhandling.TargetAggregateIdentifier;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 import org.oregami.common.CommandValidator;
 import org.oregami.gamingEnvironments.model.GamingEnvironmentValidator;
 
