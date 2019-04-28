@@ -25,7 +25,6 @@ import java.util.Map;
  * Created by sebastian on 26.06.17.
  */
 @Configuration
-@Import({AxonAutoConfiguration.class})
 public class AxonConfiguration {
 
     @Bean
