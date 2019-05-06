@@ -42,6 +42,13 @@ public class DatabaseFiller implements CommandLineRunner {
     private ReferenceApplicationService referenceApplicationService;
 
 
+    private void sleep() {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -52,7 +59,7 @@ public class DatabaseFiller implements CommandLineRunner {
 
         //#########  SNES   #######################
         String snes = UUID.randomUUID().toString();
-        gamingEnvironmentApplicationService.createNewGamingEnvironment(snes, "Super Nintendo");
+        gamingEnvironmentApplicationService.createNewGamingEnvironment(snes, "Super Nintendo").get();
 
 
         String refId1 = UUID.randomUUID().toString();
@@ -74,25 +81,36 @@ public class DatabaseFiller implements CommandLineRunner {
 
 
         String snesHwpId = UUID.randomUUID().toString();
-        hardwarePlatformApplicationService.createNewHardwarePlatform(snesHwpId, "SNES console", HardwarePlatformType.CONSOLES_EUROPE_NORTHAMERICA);
-        gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment(snes, snesHwpId);
+        hardwarePlatformApplicationService.createNewHardwarePlatform(snesHwpId, "SNES console", HardwarePlatformType.CONSOLES_EUROPE_NORTHAMERICA).get();
+        sleep();
+        gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment(snes, snesHwpId).get();
+        sleep();
 
         String snesHWM1Id = UUID.randomUUID().toString();
         String snesHWM2Id = UUID.randomUUID().toString();
         String snesHWM3Id = UUID.randomUUID().toString();
         String snesHWM4Id = UUID.randomUUID().toString();
 
-        hardwareModelApplicationService.createNewHardwareModel(snesHWM1Id, "Japanese SHVC-001 model", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(snesHWM1Id, "Japanese SHVC-001 model", HardwareModelType.HARDWARE_MODEL).get();
+        sleep();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM1Id);
+        sleep();
 
-        hardwareModelApplicationService.createNewHardwareModel(snesHWM2Id, "PAL-region SNSP-001A model", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(snesHWM2Id, "PAL-region SNSP-001A model", HardwareModelType.HARDWARE_MODEL).get();
+        sleep();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM2Id);
+        sleep();
 
-        hardwareModelApplicationService.createNewHardwareModel(snesHWM3Id, "Japanese SHVC-101 model", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(snesHWM3Id, "Japanese SHVC-101 model", HardwareModelType.HARDWARE_MODEL).get();
+        sleep();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM3Id);
+        sleep();
 
-        hardwareModelApplicationService.createNewHardwareModel(snesHWM4Id, "SNES mini", HardwareModelType.NEW_HARDWARE_WITH_EMULATOR);
+        hardwareModelApplicationService.createNewHardwareModel(snesHWM4Id, "SNES mini", HardwareModelType.NEW_HARDWARE_WITH_EMULATOR).get();
+        sleep();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM4Id);
+        sleep();
+
         /*
         Japanese SHVC-001 model
         PAL-region SNSP-001A model
@@ -102,39 +120,51 @@ public class DatabaseFiller implements CommandLineRunner {
 
         //#########  C64   #######################
         String c64 = UUID.randomUUID().toString();
-        gamingEnvironmentApplicationService.createNewGamingEnvironment(c64, "Commodore 64");
+        gamingEnvironmentApplicationService.createNewGamingEnvironment(c64, "Commodore 64").get();
         gamingEnvironmentApplicationService.addYearOfFirstRelease(c64, Year.of(1982));
 
         String c64HwpId = UUID.randomUUID().toString();
-        hardwarePlatformApplicationService.createNewHardwarePlatform(c64HwpId, "Commodore MOS machine & compatibles", HardwarePlatformType.HOME_COMPUTERS_EUROPE_NORTHAMERICA);
+        hardwarePlatformApplicationService.createNewHardwarePlatform(c64HwpId, "Commodore MOS machine & compatibles", HardwarePlatformType.HOME_COMPUTERS_EUROPE_NORTHAMERICA).get();
+        sleep();
         gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment(c64, c64HwpId);
+        sleep();
 
         String c64HHwmC64OriginalId = UUID.randomUUID().toString();
         String c64HHwmC64_I_Id = UUID.randomUUID().toString();
         String c64HHwmC64_II_Id = UUID.randomUUID().toString();
         String c64HHwmC64_Mini_Id = UUID.randomUUID().toString();
 
-        hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64OriginalId, "original C64", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64OriginalId, "original C64", HardwareModelType.HARDWARE_MODEL).get();
+        sleep();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64OriginalId);
+        sleep();
 
-        hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64_I_Id, "C64-I", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64_I_Id, "C64-I", HardwareModelType.HARDWARE_MODEL).get();
+        sleep();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64_I_Id);
+        sleep();
 
-        hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64_II_Id, "C64-II", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64_II_Id, "C64-II", HardwareModelType.HARDWARE_MODEL).get();
+        sleep();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64_II_Id);
+        sleep();
 
-        hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64_Mini_Id, "The C64 Mini", HardwareModelType.NEW_HARDWARE_WITH_EMULATOR);
+        hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64_Mini_Id, "The C64 Mini", HardwareModelType.NEW_HARDWARE_WITH_EMULATOR).get();
+        sleep();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64_Mini_Id);
+        sleep();
 
 
         //#########  AMIGA   #######################
         String amiga = UUID.randomUUID().toString();
-        gamingEnvironmentApplicationService.createNewGamingEnvironment(amiga, "Commodore Amiga");
+        gamingEnvironmentApplicationService.createNewGamingEnvironment(amiga, "Commodore Amiga").get();
         gamingEnvironmentApplicationService.addYearOfFirstRelease(amiga, Year.of(1985));
 
         String amigaHwpId = UUID.randomUUID().toString();
-        hardwarePlatformApplicationService.createNewHardwarePlatform(amigaHwpId, "Amiga 68k machine", HardwarePlatformType.HOME_COMPUTERS_EUROPE_NORTHAMERICA);
+        hardwarePlatformApplicationService.createNewHardwarePlatform(amigaHwpId, "Amiga 68k machine", HardwarePlatformType.HOME_COMPUTERS_EUROPE_NORTHAMERICA).get();
+        sleep();
         gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment(amiga, amigaHwpId);
+        sleep();
 
         String amigaHwmAmiga500Id = UUID.randomUUID().toString();
         String amigaHwmAmiga1000Id = UUID.randomUUID().toString();
@@ -144,25 +174,25 @@ public class DatabaseFiller implements CommandLineRunner {
         String amigaHwmAmiga4000Id = UUID.randomUUID().toString();
         String amigaHwmAmiga3000Id = UUID.randomUUID().toString();
 
-        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga500Id, "Amiga 500", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga500Id, "Amiga 500", HardwareModelType.HARDWARE_MODEL).get();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(amigaHwpId, amigaHwmAmiga500Id);
 
-        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga1000Id, "Amiga 1000", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga1000Id, "Amiga 1000", HardwareModelType.HARDWARE_MODEL).get();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(amigaHwpId, amigaHwmAmiga1000Id);
 
-        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga2000Id, "Amiga 2000", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga2000Id, "Amiga 2000", HardwareModelType.HARDWARE_MODEL).get();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(amigaHwpId, amigaHwmAmiga2000Id);
 
-        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga1200Id, "Amiga 1200", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga1200Id, "Amiga 1200", HardwareModelType.HARDWARE_MODEL).get();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(amigaHwpId, amigaHwmAmiga1200Id);
 
-        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga600Id, "Amiga 600", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga600Id, "Amiga 600", HardwareModelType.HARDWARE_MODEL).get();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(amigaHwpId, amigaHwmAmiga600Id);
 
-        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga4000Id, "Amiga 4000", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga4000Id, "Amiga 4000", HardwareModelType.HARDWARE_MODEL).get();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(amigaHwpId, amigaHwmAmiga4000Id);
 
-        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga3000Id, "Amiga 3000", HardwareModelType.HARDWARE_MODEL);
+        hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga3000Id, "Amiga 3000", HardwareModelType.HARDWARE_MODEL).get() ;
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(amigaHwpId, amigaHwmAmiga3000Id);
 
     }

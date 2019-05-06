@@ -92,6 +92,8 @@ public class EventHelper {
                 map.put("username", ((KeycloakPrincipal)(event.getMetaData().get("userId"))).getKeycloakSecurityContext().getToken().getPreferredUsername());
             } catch (ClassCastException e) {
                 map.put("username", event.getMetaData().get("userId"));
+            } catch (Exception e) {
+                map.put("username", "exception");
             }
 
 
