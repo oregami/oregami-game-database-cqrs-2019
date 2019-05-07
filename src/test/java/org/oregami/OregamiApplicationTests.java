@@ -151,7 +151,9 @@ public class OregamiApplicationTests {
 	@Test
 	public void gamingEnvironmentApplicationServiceTest() throws ExecutionException, InterruptedException {
 
-	    gamingEnvironmentApplicationService.createNewGamingEnvironment("idc64GE", "Commodore 64");
+	    gamingEnvironmentApplicationService.createNewGamingEnvironment("idc64GE", "Commodore 64")
+        .get();
+        sleep();
 
         Optional<RGamingEnvironment> c64GE = gamingEnvironmentRepository.findById("idc64GE");
 
