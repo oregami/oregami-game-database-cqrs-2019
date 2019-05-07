@@ -235,6 +235,12 @@ public class GamingEnvironmentEditResource {
             }
         }
 
+        //axon-4 asynchronous event processing - better wait some time first:
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(gamingEnvironment.getHardwarePlatform().getId(), newHardwareModelId);
 
         model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
