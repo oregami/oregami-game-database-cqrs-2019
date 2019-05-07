@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.Year;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 @Component
 public class DatabaseFiller implements CommandLineRunner {
@@ -41,10 +40,12 @@ public class DatabaseFiller implements CommandLineRunner {
     @Autowired
     private ReferenceApplicationService referenceApplicationService;
 
-
+    /**
+     * Needed for waiting of asynchrounous event processing
+     */
     private void sleep() {
         try {
-            Thread.sleep(100);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -66,10 +67,8 @@ public class DatabaseFiller implements CommandLineRunner {
         //String refId2 = UUID.randomUUID().toString();
 
         Set<String> eventIdSet = new HashSet<>();
-        CompletableFuture<Object> newReferenceResult = referenceApplicationService.createNewReference(refId1, ReferenceType.FAN_SITE, eventIdSet, null, null);
-        //CompletableFuture<Object> newReferenceResult2 = referenceApplicationService.createNewReference(refId2, ReferenceType.MIND_PROTOCOL, eventIdSet);
+        referenceApplicationService.createNewReference(refId1, ReferenceType.FAN_SITE, eventIdSet, null, null).get();
         referenceApplicationService.addUrl(refId1, "https://nintendo.fandom.com/wiki/Super_Famicom");
-        //referenceApplicationService.addUrl(refId2, "https://www.google.de");
 
         Map<String, Map<String, Object>> eventInformationSnes = eventHelper.getEventInformation(snes);
         for (String key: eventInformationSnes.keySet()) {
@@ -77,7 +76,7 @@ public class DatabaseFiller implements CommandLineRunner {
             //referenceApplicationService.addEventId(refId2, eventInformationSnes.get(key).get("Identifier").toString());
         }
 
-        gamingEnvironmentApplicationService.addYearOfFirstRelease(snes, Year.of(1990));
+        gamingEnvironmentApplicationService.addYearOfFirstRelease(snes, Year.of(1990)).get();
 
 
         String snesHwpId = UUID.randomUUID().toString();
@@ -93,22 +92,22 @@ public class DatabaseFiller implements CommandLineRunner {
 
         hardwareModelApplicationService.createNewHardwareModel(snesHWM1Id, "Japanese SHVC-001 model", HardwareModelType.HARDWARE_MODEL).get();
         sleep();
-        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM1Id);
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM1Id).get();
         sleep();
 
         hardwareModelApplicationService.createNewHardwareModel(snesHWM2Id, "PAL-region SNSP-001A model", HardwareModelType.HARDWARE_MODEL).get();
         sleep();
-        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM2Id);
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM2Id).get();
         sleep();
 
         hardwareModelApplicationService.createNewHardwareModel(snesHWM3Id, "Japanese SHVC-101 model", HardwareModelType.HARDWARE_MODEL).get();
         sleep();
-        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM3Id);
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM3Id).get();
         sleep();
 
         hardwareModelApplicationService.createNewHardwareModel(snesHWM4Id, "SNES mini", HardwareModelType.NEW_HARDWARE_WITH_EMULATOR).get();
         sleep();
-        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM4Id);
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(snesHwpId, snesHWM4Id).get();
         sleep();
 
         /*
@@ -120,13 +119,15 @@ public class DatabaseFiller implements CommandLineRunner {
 
         //#########  C64   #######################
         String c64 = UUID.randomUUID().toString();
-        gamingEnvironmentApplicationService.createNewGamingEnvironment(c64, "Commodore 64").get();
-        gamingEnvironmentApplicationService.addYearOfFirstRelease(c64, Year.of(1982));
+        Object o = gamingEnvironmentApplicationService.createNewGamingEnvironment(c64, "Commodore 64")
+                .get();
+        System.out.println("step1");
+        gamingEnvironmentApplicationService.addYearOfFirstRelease(c64, Year.of(1982)).get();
 
         String c64HwpId = UUID.randomUUID().toString();
         hardwarePlatformApplicationService.createNewHardwarePlatform(c64HwpId, "Commodore MOS machine & compatibles", HardwarePlatformType.HOME_COMPUTERS_EUROPE_NORTHAMERICA).get();
         sleep();
-        gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment(c64, c64HwpId);
+        gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment(c64, c64HwpId).get();
         sleep();
 
         String c64HHwmC64OriginalId = UUID.randomUUID().toString();
@@ -136,34 +137,34 @@ public class DatabaseFiller implements CommandLineRunner {
 
         hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64OriginalId, "original C64", HardwareModelType.HARDWARE_MODEL).get();
         sleep();
-        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64OriginalId);
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64OriginalId).get();
         sleep();
 
         hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64_I_Id, "C64-I", HardwareModelType.HARDWARE_MODEL).get();
         sleep();
-        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64_I_Id);
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64_I_Id).get();
         sleep();
 
         hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64_II_Id, "C64-II", HardwareModelType.HARDWARE_MODEL).get();
         sleep();
-        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64_II_Id);
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64_II_Id).get();
         sleep();
 
         hardwareModelApplicationService.createNewHardwareModel(c64HHwmC64_Mini_Id, "The C64 Mini", HardwareModelType.NEW_HARDWARE_WITH_EMULATOR).get();
         sleep();
-        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64_Mini_Id);
+        hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(c64HwpId, c64HHwmC64_Mini_Id).get();
         sleep();
 
 
         //#########  AMIGA   #######################
         String amiga = UUID.randomUUID().toString();
         gamingEnvironmentApplicationService.createNewGamingEnvironment(amiga, "Commodore Amiga").get();
-        gamingEnvironmentApplicationService.addYearOfFirstRelease(amiga, Year.of(1985));
+        gamingEnvironmentApplicationService.addYearOfFirstRelease(amiga, Year.of(1985)).get();
 
         String amigaHwpId = UUID.randomUUID().toString();
         hardwarePlatformApplicationService.createNewHardwarePlatform(amigaHwpId, "Amiga 68k machine", HardwarePlatformType.HOME_COMPUTERS_EUROPE_NORTHAMERICA).get();
         sleep();
-        gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment(amiga, amigaHwpId);
+        gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment(amiga, amigaHwpId).get();
         sleep();
 
         String amigaHwmAmiga500Id = UUID.randomUUID().toString();
