@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.oregami.common.BaseEntityUUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.Year;
 
@@ -27,7 +25,7 @@ public class RGamingEnvironment extends BaseEntityUUID {
     @Column
     private LocalDateTime changeTime;
 
-    @OneToOne //(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private RHardwarePlatform hardwarePlatform;
 
     public RGamingEnvironment(String id, String workingTitle) {
