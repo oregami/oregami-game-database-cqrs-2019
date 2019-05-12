@@ -3,6 +3,7 @@ package org.oregami.config;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.commandhandling.SimpleCommandBus;
 import org.axonframework.common.transaction.TransactionManager;
+import org.axonframework.config.EventProcessingConfigurer;
 import org.axonframework.eventhandling.tokenstore.TokenStore;
 import org.axonframework.eventhandling.tokenstore.inmemory.InMemoryTokenStore;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
@@ -13,6 +14,7 @@ import org.axonframework.messaging.correlation.CorrelationDataProvider;
 import org.axonframework.messaging.interceptors.CorrelationDataInterceptor;
 import org.axonframework.monitoring.NoOpMessageMonitor;
 import org.keycloak.KeycloakPrincipal;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
@@ -77,6 +79,13 @@ public class AxonConfiguration {
     @Bean
     public TokenStore tokenStore() {
         return new InMemoryTokenStore();
+    }
+
+
+    // Default all processors to subscribing mode => synchronous processing of events
+    @Autowired
+    public void configure(EventProcessingConfigurer config) {
+        config.usingSubscribingEventProcessors();
     }
 
 
