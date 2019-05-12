@@ -1,10 +1,20 @@
 package org.oregami.config;
 
+import org.axonframework.commandhandling.CommandBus;
+import org.axonframework.commandhandling.SimpleCommandBus;
+import org.axonframework.common.transaction.TransactionManager;
+import org.axonframework.config.EventProcessingConfigurer;
+import org.axonframework.eventhandling.tokenstore.TokenStore;
+import org.axonframework.eventhandling.tokenstore.inmemory.InMemoryTokenStore;
 import org.axonframework.eventsourcing.eventstore.EmbeddedEventStore;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.axonframework.eventsourcing.eventstore.inmemory.InMemoryEventStorageEngine;
 import org.axonframework.messaging.Message;
 import org.axonframework.messaging.correlation.CorrelationDataProvider;
+import org.axonframework.messaging.interceptors.CorrelationDataInterceptor;
+import org.axonframework.monitoring.NoOpMessageMonitor;
+import org.keycloak.KeycloakPrincipal;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
@@ -27,7 +37,16 @@ public class AxonConfiguration {
                 Map<String, Object> m = new HashMap<>();
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 if (authentication!=null && authentication.isAuthenticated()) {
-                    m.put("userId", authentication.getPrincipal());
+                    try {
+                        KeycloakPrincipal principal = (KeycloakPrincipal) authentication.getPrincipal();
+                        m.put("userId", principal.getName());
+                        m.put("username", principal.getKeycloakSecurityContext().getToken().getPreferredUsername());
+                    }
+                    catch(ClassCastException e) {
+                        m.put("userId", authentication.getPrincipal());
+                    }
+                } else {
+                    m.put("userId", "getAuthentication-null");
                 }
                 return m;
             }
@@ -38,7 +57,35 @@ public class AxonConfiguration {
     @Bean
     public EventStore eventStore() {
         InMemoryEventStorageEngine storageEngine = new InMemoryEventStorageEngine();
-        return new EmbeddedEventStore(storageEngine);
+        return new EmbeddedEventStore.Builder()
+                .storageEngine(storageEngine)
+                .cachedEvents(100)
+        .build();
+    }
+
+
+    @Bean
+    public SimpleCommandBus commandBus(TransactionManager txManager) {
+        SimpleCommandBus commandBus =
+                SimpleCommandBus.builder()
+                        .transactionManager(txManager)
+                        .build();
+        commandBus.registerHandlerInterceptor(
+                new CorrelationDataInterceptor<>(correlationDataProvider())
+        );
+        return commandBus;
+    }
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new InMemoryTokenStore();
+    }
+
+
+    // Default all processors to subscribing mode => synchronous processing of events
+    @Autowired
+    public void configure(EventProcessingConfigurer config) {
+        config.usingSubscribingEventProcessors();
     }
 
 

@@ -1,9 +1,5 @@
 package org.oregami.gamingEnvironments.event;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 /**
  * Created by sebastian on 24.02.17.
  */

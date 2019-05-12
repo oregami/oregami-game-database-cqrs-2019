@@ -25,7 +25,7 @@ public class RGamingEnvironment extends BaseEntityUUID {
     @Column
     private LocalDateTime changeTime;
 
-    @OneToOne //(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private RHardwarePlatform hardwarePlatform;
 
     public RGamingEnvironment(String id, String workingTitle) {

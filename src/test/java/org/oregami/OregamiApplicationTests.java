@@ -62,6 +62,17 @@ public class OregamiApplicationTests {
     ReferenceRepository referenceRepository;
 
 
+    /**
+     * Needed for waiting of asynchrounous event processing
+     */
+    private void sleep() {
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void validationTest() {
 
@@ -138,9 +149,11 @@ public class OregamiApplicationTests {
     }
 
 	@Test
-	public void gamingEnvironmentApplicationServiceTest() {
+	public void gamingEnvironmentApplicationServiceTest() throws ExecutionException, InterruptedException {
 
-	    gamingEnvironmentApplicationService.createNewGamingEnvironment("idc64GE", "Commodore 64");
+	    gamingEnvironmentApplicationService.createNewGamingEnvironment("idc64GE", "Commodore 64")
+        .get();
+        sleep();
 
         Optional<RGamingEnvironment> c64GE = gamingEnvironmentRepository.findById("idc64GE");
 
@@ -151,12 +164,17 @@ public class OregamiApplicationTests {
         gamingEnvironmentApplicationService.addYearOfFirstRelease("idc64GE", Year.of(1982));
 
 
-        hardwarePlatformApplicationService.createNewHardwarePlatform("idc64HWP", "Commodore MOS machine & compatibles", HardwarePlatformType.HOME_COMPUTERS_EUROPE_NORTHAMERICA);
+        hardwarePlatformApplicationService.createNewHardwarePlatform("idc64HWP", "Commodore MOS machine & compatibles", HardwarePlatformType.HOME_COMPUTERS_EUROPE_NORTHAMERICA)
+        .get();
+        sleep();
+
         RHardwarePlatform c64HWP = hardwarePlatformRepository.findById("idc64HWP").get();
         Assert.assertNotNull(c64HWP);
         Assert.assertEquals("Commodore MOS machine & compatibles", c64HWP.getWorkingTitle());
 
-        gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment("idc64GE", "idc64HWP");
+        gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment("idc64GE", "idc64HWP")
+        .get();
+        sleep();
 
 
         hardwareModelApplicationService.createNewHardwareModel("idHmC64original", "original C64", HardwareModelType.HARDWARE_MODEL);

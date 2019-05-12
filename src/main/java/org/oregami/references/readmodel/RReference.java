@@ -3,11 +3,12 @@ package org.oregami.references.readmodel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.oregami.common.BaseEntityUUID;
-import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwarePlatform;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import java.time.LocalDateTime;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 

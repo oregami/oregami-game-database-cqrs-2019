@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.builder.RecursiveToStringStyle;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.axonframework.eventsourcing.DomainEventMessage;
+import org.axonframework.eventhandling.DomainEventMessage;
 import org.axonframework.eventsourcing.eventstore.DomainEventStream;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.keycloak.KeycloakPrincipal;
@@ -92,6 +92,8 @@ public class EventHelper {
                 map.put("username", ((KeycloakPrincipal)(event.getMetaData().get("userId"))).getKeycloakSecurityContext().getToken().getPreferredUsername());
             } catch (ClassCastException e) {
                 map.put("username", event.getMetaData().get("userId"));
+            } catch (Exception e) {
+                map.put("username", "exception");
             }
 
 

@@ -1,6 +1,5 @@
 package org.oregami.gamingEnvironments.readmodel.withTitles;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.oregami.common.BaseEntityUUID;
