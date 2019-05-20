@@ -76,13 +76,13 @@ public class ReferenceEditResource {
             @RequestParam String aggregateRootId,
             @RequestParam String referenceType,
             @RequestParam String selectedEventIds,
-            @RequestParam (required = false) String url,
+            //@RequestParam (required = false) String url,
             @RequestParam (required = false) String description,
             Model model) {
 
         String id = UUID.randomUUID().toString();
         CompletableFuture<Object> completableFuture = referenceApplicationService.createNewReference(
-                id, ReferenceType.valueOf(referenceType), new TreeSet<>(Arrays.asList(selectedEventIds.split(","))), url, description
+                id, ReferenceType.valueOf(referenceType), new TreeSet<>(Arrays.asList(selectedEventIds.split(","))), description
         );
 
         try {

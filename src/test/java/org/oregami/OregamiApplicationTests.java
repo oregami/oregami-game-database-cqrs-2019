@@ -105,13 +105,13 @@ public class OregamiApplicationTests {
     public void ref1() {
         HashSet<String> eventIDs = new HashSet<>();
         eventIDs.add("eventId1");
-        referenceApplicationService.createNewReference("id1", ReferenceType.FAN_SITE, eventIDs, null, null);
+        referenceApplicationService.createNewReference("id1", ReferenceType.WEBSITE, eventIDs, null);
     }
 
     @Test
     public void ref2() {
         HashSet<String> eventIDs = new HashSet<>();
-        referenceApplicationService.createNewReference("id1", ReferenceType.FAN_SITE, eventIDs, null, null);
+        referenceApplicationService.createNewReference("id1", ReferenceType.WEBSITE, eventIDs, null);
         eventIDs.add("eventId1");
         referenceApplicationService.addEventId("id1", "eventId2");
     }
@@ -122,8 +122,7 @@ public class OregamiApplicationTests {
         Set<String> eventIdSet = new HashSet<>();
         eventIdSet.add("test_event_id1");
 
-        referenceApplicationService.createNewReference(id, ReferenceType.OFFICIAL_SITE, eventIdSet, null, null);
-        referenceApplicationService.addUrl(id, "http://www.kultpower.de");
+        referenceApplicationService.createNewReference(id, ReferenceType.PRESS_RELEASE, eventIdSet, null);
         referenceApplicationService.addEventId(id, "test_event_id2");
 
         referenceApplicationService.addDescription(id,"desc text");

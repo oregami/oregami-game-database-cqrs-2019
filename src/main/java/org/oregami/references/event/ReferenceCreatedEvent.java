@@ -12,15 +12,12 @@ public class ReferenceCreatedEvent {
 
     private final Set<String> eventIdSet;
 
-    private final String url;
-
     private final String description;
 
-    public ReferenceCreatedEvent(String newId, ReferenceType referenceType, Set<String> eventIdSet, String url, String description) {
+    public ReferenceCreatedEvent(String newId, ReferenceType referenceType, Set<String> eventIdSet, String description) {
         this.newId = newId;
         this.referenceType = referenceType;
         this.eventIdSet = eventIdSet;
-        this.url = url;
         this.description = description;
     }
 
@@ -34,10 +31,6 @@ public class ReferenceCreatedEvent {
 
     public Set<String> getEventIdSet() {
         return eventIdSet;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
     public String getDescription() {

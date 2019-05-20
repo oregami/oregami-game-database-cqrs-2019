@@ -30,8 +30,6 @@ public class Reference {
 
     private ReferenceType referenceType;
 
-    private String url;
-
     private String description;
 
     private List<String> eventIdList = new ArrayList<>();
@@ -39,7 +37,7 @@ public class Reference {
 
     @CommandHandler
     public Reference(CreateReferenceCommand command) {
-        AggregateLifecycle.apply(new ReferenceCreatedEvent(command.getNewId(), command.getReferenceType(), command.getEventIdSet(), command.getUrl(), command.getDescription()));
+        AggregateLifecycle.apply(new ReferenceCreatedEvent(command.getNewId(), command.getReferenceType(), command.getEventIdSet(), command.getDescription()));
     }
 
     @EventSourcingHandler
@@ -52,11 +50,6 @@ public class Reference {
     @CommandHandler
     public void in(AddUrlCommand command) {
         AggregateLifecycle.apply(new UrlAddedEvent(command.getReferenceId(), command.getUrl()));
-    }
-
-    @EventSourcingHandler
-    public void in(UrlAddedEvent event) {
-        this.url = event.getUrl();
     }
 
     @CommandHandler
@@ -72,11 +65,6 @@ public class Reference {
     @CommandHandler
     public void in(AddDescriptionCommand command) {
         AggregateLifecycle.apply(new DescriptionAddedEvent(command.getReferenceId(), command.getDescription()));
-    }
-
-    @EventSourcingHandler
-    public void in(DescriptionAddedEvent event) {
-        this.url = event.getDescription();
     }
 
 }

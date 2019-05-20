@@ -54,8 +54,7 @@ public class DatabaseFiller implements CommandLineRunner {
         //String refId2 = UUID.randomUUID().toString();
 
         Set<String> eventIdSet = new HashSet<>();
-        referenceApplicationService.createNewReference(refId1, ReferenceType.FAN_SITE, eventIdSet, null, null).get();
-        referenceApplicationService.addUrl(refId1, "https://nintendo.fandom.com/wiki/Super_Famicom");
+        referenceApplicationService.createNewReference(refId1, ReferenceType.WEBSITE, eventIdSet, null).get();
 
         Map<String, Map<String, Object>> eventInformationSnes = eventHelper.getEventInformation(snes);
         for (String key: eventInformationSnes.keySet()) {

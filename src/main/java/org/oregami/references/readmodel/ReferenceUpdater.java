@@ -32,7 +32,7 @@ public class ReferenceUpdater {
                 r.addEventId(id);
             }
         }
-        r.setUrl(event.getUrl());
+//        r.setUrl(event.getUrl());
         r.setDescription(event.getDescription());
         r.setChangeTime(LocalDateTime.now());
         repository.save(r);
