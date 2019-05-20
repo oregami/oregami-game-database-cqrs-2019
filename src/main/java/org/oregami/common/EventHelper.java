@@ -90,8 +90,11 @@ public class EventHelper {
 
             try {
                 map.put("username", ((KeycloakPrincipal)(event.getMetaData().get("userId"))).getKeycloakSecurityContext().getToken().getPreferredUsername());
+                map.put("userId", ((KeycloakPrincipal)(event.getMetaData().get("userId"))).getKeycloakSecurityContext().getToken().getPreferredUsername());
+
             } catch (ClassCastException e) {
-                map.put("username", event.getMetaData().get("userId"));
+                map.put("username", event.getMetaData().get("username"));
+                map.put("userId", event.getMetaData().get("userId"));
             } catch (Exception e) {
                 map.put("username", "exception");
             }

@@ -121,7 +121,9 @@
                 ></span>
             </td>
             <td style="vertical-align: top;">
-                <span th:text="${event.value.get('username')}"></span>
+                <span th:if="${event.value.get('username')}" th:text="${event.value.get('username')}"></span>
+                <span th:if="${event.value.get('username')==null}" th:text="${event.value.get('userId')}"></span>
+
             </td>
             <td style="vertical-align: top;">
                 <span th:text="${event.value.get('Identifier')}"></span>
