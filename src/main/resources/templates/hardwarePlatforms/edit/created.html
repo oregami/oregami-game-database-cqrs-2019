@@ -5,7 +5,7 @@
 
 <head th:include="header :: header" th:with="title=''"></head>
 
-<meta th:if="${nextUrl!=''}" http-equiv="refresh" th:attr="content=${'0; ' + nextUrl + '/addHardwarePlatform?hardwarePlatformId=' + hardwarePlatformId}" />
+<meta th:if="${nextUrl!=''}" http-equiv="refresh" th:attr="content=${'3; ' + nextUrl + '/addHardwarePlatform?hardwarePlatformId=' + hardwarePlatformId}" />
 
 <body>
 
@@ -13,7 +13,7 @@
 
 <div class="ui segment">
 
-        <a th:href="@{/hardwarePlatforms/} + ${hardwarePlatformId}">view created hardware platform</a>
+        <a th:href="@{/hardwarePlatforms/} + ${hardwarePlatformId}">view created hardware platform</a> (or wait a moment)
 </div>
 
 
