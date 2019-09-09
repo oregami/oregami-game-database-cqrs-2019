@@ -5,7 +5,7 @@
 
 <head th:include="header :: header" th:with="title=''"></head>
 
-<meta http-equiv="refresh" th:attr="content=${'0, /gamingEnvironments/' + gamingEnvironmentId}" />
+<meta http-equiv="refresh" th:attr="content=${'3, /gamingEnvironments/' + gamingEnvironmentId}" />
 
 
 <body>
@@ -14,7 +14,7 @@
 
 
 <div class="ui segment">
-        <a th:href="@{/gamingEnvironments/} + ${gamingEnvironmentId}">view updated gamingEnvironment</a>
+        <a th:href="@{/gamingEnvironments/} + ${gamingEnvironmentId}">view updated gamingEnvironment</a> (or wait a moment)
 </div>
 
 

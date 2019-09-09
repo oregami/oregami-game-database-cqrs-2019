@@ -82,10 +82,16 @@ public class AxonConfiguration {
     }
 
 
-    // Default all processors to subscribing mode => synchronous processing of events
     @Autowired
     public void configure(EventProcessingConfigurer config) {
-        config.usingSubscribingEventProcessors();
+
+        boolean synchronousProcessing = false;
+        //true => process all events synchronous, which prevents replaying of events!
+        //false => process all events asynchronous in extra threads, which makes replaying of events possible
+
+        if (synchronousProcessing) {
+            config.usingSubscribingEventProcessors();
+        }
     }
 
 

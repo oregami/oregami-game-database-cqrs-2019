@@ -102,6 +102,7 @@ public class DatabaseFiller implements CommandLineRunner {
 
         String c64HwpId = UUID.randomUUID().toString();
         hardwarePlatformApplicationService.createNewHardwarePlatform(c64HwpId, "Commodore MOS machine & compatibles", HardwarePlatformType.HOME_COMPUTERS_EUROPE_NORTHAMERICA).get();
+        Util.waitSomeTime();
         gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment(c64, c64HwpId).get();
 
         String c64HHwmC64OriginalId = UUID.randomUUID().toString();
@@ -129,6 +130,8 @@ public class DatabaseFiller implements CommandLineRunner {
 
         String amigaHwpId = UUID.randomUUID().toString();
         hardwarePlatformApplicationService.createNewHardwarePlatform(amigaHwpId, "Amiga 68k machine", HardwarePlatformType.HOME_COMPUTERS_EUROPE_NORTHAMERICA).get();
+        Util.waitSomeTime();
+
         gamingEnvironmentApplicationService.addHardwarePlatformToGamingEnvironment(amiga, amigaHwpId).get();
 
         String amigaHwmAmiga500Id = UUID.randomUUID().toString();
