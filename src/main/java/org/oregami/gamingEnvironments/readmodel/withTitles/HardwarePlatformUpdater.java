@@ -4,8 +4,10 @@ import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.oregami.gamingEnvironments.event.HardwareModelAddedToHardwarePlatformEvent;
 import org.oregami.gamingEnvironments.event.HardwarePlatformCreatedEvent;
+import org.oregami.gamingEnvironments.event.RegionAddedToHardwarePlatformEvent;
 import org.oregami.gamingEnvironments.model.HardwareModelRepository;
 import org.oregami.gamingEnvironments.model.HardwarePlatformRepository;
+import org.oregami.gamingEnvironments.model.types.Region;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +46,13 @@ public class HardwarePlatformUpdater {
         RHardwareModel hardwareModel = hardwareModelRepository.findById(event.getHardwareModelId()).get();
         hardwarePlatform.getHardwareModelSet().add(hardwareModel);
         hardwarePlatform.setChangeTime(LocalDateTime.now());
+        hardwarePlatformRepository.save(hardwarePlatform);
+    }
+
+    @EventHandler
+    public void on(RegionAddedToHardwarePlatformEvent event) {
+        RHardwarePlatform hardwarePlatform = hardwarePlatformRepository.getOne(event.getId());
+        hardwarePlatform.setRegion(event.getRegion().name());
         hardwarePlatformRepository.save(hardwarePlatform);
     }
 
