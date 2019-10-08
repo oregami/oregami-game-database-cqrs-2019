@@ -22,7 +22,7 @@ public class CreateHardwarePlatformCommand {
         this.hardwarePlatformType = hardwarePlatformType;
     }
 
-    public String getId() {
+    public String getNewId() {
         return newId;
     }
 

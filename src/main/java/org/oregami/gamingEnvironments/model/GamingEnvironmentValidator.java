@@ -3,10 +3,8 @@ package org.oregami.gamingEnvironments.model;
 import org.oregami.common.CommonError;
 import org.oregami.common.CommonErrorContext;
 import org.oregami.common.CommonResult;
-import org.oregami.gamingEnvironments.command.AddYearOfFirstReleaseCommand;
-import org.oregami.gamingEnvironments.command.CreateGamingEnvironmentCommand;
-import org.oregami.gamingEnvironments.command.CreateHardwareModelCommand;
-import org.oregami.gamingEnvironments.command.CreateHardwarePlatformCommand;
+import org.oregami.gamingEnvironments.command.*;
+import org.oregami.gamingEnvironments.model.types.Region;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -31,6 +29,19 @@ public class GamingEnvironmentValidator {
 
     public CommonResult<Object> validate(CreateHardwareModelCommand c) {
         return validateWorkingTitle(c.getWorkingTitle());
+    }
+
+    public CommonResult<Object> validate(AddRegionToHardwarePlatformCommand c) {
+        List<CommonError> errors = new ArrayList<>();
+
+        if (c.getRegion()==null) {
+            CommonError empty = new CommonError(new CommonErrorContext("region"), "MSG_REGION_EMPTY");
+            errors.add(empty);
+        }
+
+        CommonResult<Object> result = new CommonResult<Object>(errors);
+        return result;
+
     }
 
     private CommonResult<Object> validateWorkingTitle(String workingTitle) {

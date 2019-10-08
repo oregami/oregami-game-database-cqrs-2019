@@ -8,6 +8,7 @@ import org.oregami.gamingEnvironments.application.HardwarePlatformApplicationSer
 import org.oregami.gamingEnvironments.model.GamingEnvironmentRepository;
 import org.oregami.gamingEnvironments.model.types.HardwareModelType;
 import org.oregami.gamingEnvironments.model.types.HardwarePlatformType;
+import org.oregami.gamingEnvironments.model.types.Region;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RGamingEnvironment;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwareModel;
 import org.oregami.gamingEnvironments.readmodel.withTitles.RHardwarePlatform;
@@ -153,6 +154,18 @@ public class GamingEnvironmentEditResource {
         return "hardwarePlatforms/edit/create";
     }
 
+    @GetMapping(value = "/{gamingEnvironmentId}/addRegionToHardwarePlatform")
+    public String addRegionToHardwareModel(
+            @PathVariable String gamingEnvironmentId,
+            @RequestParam String hardwarePlatformId,
+            Model model) {
+        model.addAttribute("gamingEnvironmentId", gamingEnvironmentId);
+        model.addAttribute("hardwarePlatformId", hardwarePlatformId);
+        model.addAttribute("availableRegions", getAvailableRegions());
+        model.addAttribute("nextUrl", "/gamingEnvironmentId/" + gamingEnvironmentId);
+        return "gamingEnvironments/edit/addRegionToHardwarePlatform";
+    }
+
     @GetMapping(value = "/{gamingEnvironmentId}/addHardwarePlatform")
     public RedirectView addHardwareplatform(
             @PathVariable String gamingEnvironmentId
@@ -250,6 +263,14 @@ public class GamingEnvironmentEditResource {
     public List<String> getAvailableHardwarePlatformTypes() {
         List<String> list = new ArrayList<>();
         for (HardwarePlatformType h: HardwarePlatformType.values()) {
+            list.add(h.name());
+        }
+        return list;
+    }
+
+    public List<String> getAvailableRegions() {
+        List<String> list = new ArrayList<>();
+        for (Region h: Region.values()) {
             list.add(h.name());
         }
         return list;

@@ -30,6 +30,9 @@ public class RHardwarePlatform extends BaseEntityUUID {
     @Column
     private String hardwarePlatformType;
 
+    @Column
+    private String region;
+
     public RHardwarePlatform(String id, String workingTitle, String hardwarePlatformType) {
         super(id);
         this.workingTitle = workingTitle;
@@ -60,4 +63,11 @@ public class RHardwarePlatform extends BaseEntityUUID {
         return hardwarePlatformType;
     }
 
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
 }

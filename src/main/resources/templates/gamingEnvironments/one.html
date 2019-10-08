@@ -30,6 +30,9 @@
                 (<span th:text="#{'' + ${gamingEnvironment.hardwarePlatform.hardwarePlatformType}}">hptype</span>)
                 </th:block>
             </div>
+            <div th:if="${gamingEnvironment.hardwarePlatform.region}">
+                <span th:text="${gamingEnvironment.hardwarePlatform.region}">region</span>
+            </div>
         </div>
 
         <th:block th:if="${gamingEnvironment.hardwarePlatform.hardwareModelSet.size()>0}">
@@ -63,9 +66,18 @@
 
 
         <!--<a th:if="${gamingEnvironment.hardwarePlatform}" th:href="${'/hardwarePlatforms/' + gamingEnvironment.hardwarePlatform.id + '/addNewHardwareModel?gamingEnvironmentId=' + gamingEnvironment.id}">-->
-        <a th:if="${gamingEnvironment.hardwarePlatform}" th:href="${'/gamingEnvironments/edit/' + gamingEnvironment.id + '/addHardwareModel'}">
-            <button class="ui primary basic button" th:text="#{gamingEnvironment.addNewHardwareModel}"/>
-        </a>
+        <th:block th:if="${gamingEnvironment.hardwarePlatform}">
+
+            <th:block th:if="${gamingEnvironment.hardwarePlatform.region==null}">
+            <a th:href="@{/gamingEnvironments/edit/} + ${gamingEnvironment.id} + @{/addRegionToHardwarePlatform(gamingEnvironmentId=${gamingEnvironment.id},hardwarePlatformId=${gamingEnvironment.hardwarePlatform.id})}">
+                <button class="ui primary basic button" th:text="#{gamingEnvironment.addRegionToHardwarePlatform}"/>
+            </a>
+            </th:block>
+
+            <a th:href="${'/gamingEnvironments/edit/' + gamingEnvironment.id + '/addHardwareModel'}">
+                <button class="ui primary basic button" th:text="#{gamingEnvironment.addNewHardwareModel}"/>
+            </a>
+        </th:block>
 
         <a th:href="@{/references/edit/addNewReference(aggregateRootId=${gamingEnvironment.id},aggregateRootIds=${aggregateRootIds})}">
             <button class="ui primary basic button" th:text="#{references.addNewReference}"/>

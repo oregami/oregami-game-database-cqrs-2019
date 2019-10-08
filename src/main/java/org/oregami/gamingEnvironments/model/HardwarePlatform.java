@@ -8,10 +8,13 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.oregami.gamingEnvironments.command.AddHardwareModelToHardwarePlatformCommand;
+import org.oregami.gamingEnvironments.command.AddRegionToHardwarePlatformCommand;
 import org.oregami.gamingEnvironments.command.CreateHardwarePlatformCommand;
 import org.oregami.gamingEnvironments.event.HardwareModelAddedToHardwarePlatformEvent;
 import org.oregami.gamingEnvironments.event.HardwarePlatformCreatedEvent;
+import org.oregami.gamingEnvironments.event.RegionAddedToHardwarePlatformEvent;
 import org.oregami.gamingEnvironments.model.types.HardwarePlatformType;
+import org.oregami.gamingEnvironments.model.types.Region;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +37,13 @@ public class HardwarePlatform {
 
     List<String> hardwareModelIdList = new ArrayList<>();
 
+    private Region region = null;
+
 
 
     @CommandHandler
     public HardwarePlatform(CreateHardwarePlatformCommand command) {
-        AggregateLifecycle.apply(new HardwarePlatformCreatedEvent(command.getId(), command.getWorkingTitle(), command.getHardwarePlatformType()));
+        AggregateLifecycle.apply(new HardwarePlatformCreatedEvent(command.getNewId(), command.getWorkingTitle(), command.getHardwarePlatformType()));
     }
 
     @EventSourcingHandler
@@ -57,5 +62,14 @@ public class HardwarePlatform {
         this.hardwareModelIdList.add(event.getHardwareModelId());
     }
 
+    @CommandHandler
+    public void in(AddRegionToHardwarePlatformCommand command) {
+        AggregateLifecycle.apply(new RegionAddedToHardwarePlatformEvent(command.getHardwarePlatformId(), command.getRegion()));
+    }
+
+    @EventSourcingHandler
+    public void in(RegionAddedToHardwarePlatformEvent event) {
+        this.region = event.getRegion();
+    }
 
 }

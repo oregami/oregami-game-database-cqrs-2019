@@ -6,6 +6,7 @@ import org.oregami.gamingEnvironments.application.HardwareModelApplicationServic
 import org.oregami.gamingEnvironments.application.HardwarePlatformApplicationService;
 import org.oregami.gamingEnvironments.model.types.HardwareModelType;
 import org.oregami.gamingEnvironments.model.types.HardwarePlatformType;
+import org.oregami.gamingEnvironments.model.types.Region;
 import org.oregami.references.application.ReferenceApplicationService;
 import org.oregami.references.model.types.ReferenceType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,6 +145,8 @@ public class DatabaseFiller implements CommandLineRunner {
 
         hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga500Id, "Amiga 500", HardwareModelType.HARDWARE_MODEL).get();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(amigaHwpId, amigaHwmAmiga500Id);
+
+        hardwarePlatformApplicationService.addRegionToHardwarePlatform(amigaHwpId, Region.EUROPE);
 
         hardwareModelApplicationService.createNewHardwareModel(amigaHwmAmiga1000Id, "Amiga 1000", HardwareModelType.HARDWARE_MODEL).get();
         hardwarePlatformApplicationService.addHardwareModelToHardwarePlatform(amigaHwpId, amigaHwmAmiga1000Id);

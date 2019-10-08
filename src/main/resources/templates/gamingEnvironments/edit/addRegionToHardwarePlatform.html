@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+
+<head th:include="header :: header" th:with="title='Add region'"></head>
+
+
+<body>
+
+<nav th:replace="navigation :: navigation(URL_GAMINGENVIRONMENTS)"></nav>
+
+
+<div th:replace="loginfirst :: copy"></div>
+
+<div class="ui segment" sec:authorize="isAuthenticated()">
+
+    <div>
+        <form class="ui form" method="POST" th:attr="action=${'/hardwarePlatforms/edit/' + hardwarePlatformId + '/addRegionToHardwarePlatform'}">
+            <input type="hidden" name="gamingEnvironmentId" th:value="${gamingEnvironmentId}"/>
+            <input type="hidden" name="hardwarePlatformId" th:value="${hardwarePlatformId}"/>
+            <div class="inline field">
+                <label>region:</label>
+                <select name="region">
+                    <option value="">-</option>
+                    <option th:each="region: ${availableRegions}" th:value="${region}" th:text="#{'' + ${region}}"></option>
+                </select>
+            </div>
+
+            <button class="ui button" type="submit">save</button>
+            <input type="hidden" name="backUrl" th:value="${'/hardwarePlatforms/' + hardwarePlatformId}"/>
+        </form>
+    </div>
+</div>
+
+<div class="ui segments" th:if="${result}">
+    <div class="ui segment">
+        <p class="ui red label">Errors</p>
+    </div>
+    <div class="ui segments">
+        <div class="ui segment" th:each="error: ${result.errors}">
+            <span th:text="#{${error.messageName}}"></span>
+            <br/>
+            <span style="font-size: 80%;" th:text="${' (' + error.context.field + ')'}"></span>
+        </div>
+    </div>
+</div>
+
+<div th:replace="footer :: copy"></div>
+
+
+</body>
+</html>
