@@ -5,7 +5,7 @@ import org.oregami.gamingEnvironments.model.types.Region;
 /**
  * Created by sebastian on 24.02.17.
  */
-public class RegionAddedToHardwarePlatformEvent implements EventWithId<RegionAddedToHardwarePlatformEvent> {
+public class RegionAddedToHardwarePlatformEvent {
 
     private String id;
     private Region region;
@@ -23,9 +23,4 @@ public class RegionAddedToHardwarePlatformEvent implements EventWithId<RegionAdd
         return region;
     }
 
-    @Override
-    public RegionAddedToHardwarePlatformEvent withId(String id) {
-        this.id = id;
-        return this;
-    }
 }
