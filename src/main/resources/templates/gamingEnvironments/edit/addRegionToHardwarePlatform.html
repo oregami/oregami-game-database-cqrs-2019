@@ -22,7 +22,7 @@
             <input type="hidden" name="gamingEnvironmentId" th:value="${gamingEnvironmentId}"/>
             <input type="hidden" name="hardwarePlatformId" th:value="${hardwarePlatformId}"/>
             <div class="inline field">
-                <label>region:</label>
+                <label th:text="#{originalRegion}">original region:</label>
                 <select name="region">
                     <option value="">-</option>
                     <option th:each="region: ${availableRegions}" th:value="${region}" th:text="#{'' + ${region}}"></option>
